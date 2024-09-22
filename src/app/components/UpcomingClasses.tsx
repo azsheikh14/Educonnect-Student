@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import ReferAFriend from './ReferAFriend';
 import TakeQuiz from './TakeQuiz';
+import axios from 'axios';
 
 const UpcomingClasses = () => {
     const [upcomingClasses, setUpcomingClasses] = useState([
@@ -21,7 +22,17 @@ const UpcomingClasses = () => {
     ]);
 
     useEffect(() => {
-        // Fetch data from API in real implementation
+        const fetchUpcomingClasses = async () => {
+            try {
+                // Replace with your API call
+                const response = await axios.get('/api/upcomingClasses');
+                setUpcomingClasses(response.data);
+            } catch (error) {
+                console.error('Error fetching upcoming classes:', error);
+            }
+        };
+
+        fetchUpcomingClasses();
     }, []);
 
     const today = new Date();

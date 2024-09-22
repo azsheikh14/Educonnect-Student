@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaRegCopy } from "react-icons/fa";
-import Image from 'next/image'; // Make sure to import Image from Next.js
 
 const ReferAFriend = () => {
     return (

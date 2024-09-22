@@ -216,7 +216,7 @@ const StudentChatComponent = () => {
                             Select a chat to start messaging.
                         </div>
                         <div className="text-gray-400 text-sm mt-2">
-                            Start by clicking on a teacher's name from the list.
+                            Start by clicking on a Teachers name from the list.
                         </div>
                     </div>
                 )}

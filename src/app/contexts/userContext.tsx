@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { getDataFromToken } from '../utils/getDataFromToken';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import Student from '@/app/interface/Student'; // Import your Student type
 
 interface UserContextType {

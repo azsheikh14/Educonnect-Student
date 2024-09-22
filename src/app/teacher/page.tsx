@@ -1,8 +1,8 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import Teacher from '@/app/interface/Teacher';
+import axios from 'axios';
+import Teacher, { Education, Experience } from '@/app/interface/Teacher';
 import { FaEnvelope, FaPhone, FaGlobe } from 'react-icons/fa';
 
 const TeacherProfile = () => {
@@ -78,13 +78,14 @@ const TeacherProfile = () => {
                             </h3>
                         </div>
                         <div className=""> {/* Adjust margin as needed to avoid overlap */}
-                            {teacher.qualifications && Array.isArray(teacher.qualifications) && teacher.qualifications.map((edu: any, index: number) => (
+                            {teacher.qualifications && Array.isArray(teacher.qualifications) && teacher.qualifications.map((edu: Education, index: number) => (
                                 <div key={index} className="mb-4">
                                     <h4 className="font-semibold">{edu.year}</h4>
                                     <p>{edu.degree}</p>
                                     <p>{edu.institution}</p>
                                 </div>
                             ))}
+
                         </div>
                     </div>
                 </div>
@@ -95,7 +96,7 @@ const TeacherProfile = () => {
                         </h3>
                     </div>
                     <div className=""> {/* Adjust margin as needed to avoid overlap */}
-                        {teacher.experience && Array.isArray(teacher.experience) && teacher.experience.map((exp: any, index: number) => (
+                        {teacher.experience && Array.isArray(teacher.experience) && teacher.experience.map((exp: Experience, index: number) => (
                             <div key={index} className="mb-4">
                                 <h4 className="font-semibold">{exp.year}</h4>
                                 <p>{exp.position}</p>

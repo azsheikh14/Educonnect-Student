@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-// Ensure this matches the expected Teacher type
-type Teacher = {
-    _id: string; // Use the same property names as expected by the parent
-    name: string;
-    title?: string;
-    languages?: string[];
-    innovativeLearning?: boolean;
-    // Add other properties as necessary
-};
+import Teacher from '@/app/interface/Teacher'
 
 type TeacherSelectModalProps = {
-    onSelect: (teacher: any) => void;
+    onSelect: (teacher: Teacher) => void;
     onClose: () => void;
 };
 
@@ -28,6 +19,7 @@ const TeacherSelectModal: React.FC<TeacherSelectModalProps> = ({ onSelect, onClo
                 const response = await axios.post(`${apiUrl}/teacher/getAllTeachers/`);
                 setTeachers(response.data);
             } catch (error) {
+                console.error(error)
                 setError("Failed to load teachers. Please try again.");
             } finally {
                 setLoading(false);

@@ -6,6 +6,7 @@ interface UpdateComponentProps {
     student: Student;
 }
 const Updates: React.FC<UpdateComponentProps> = ({ student }) => {
+    console.log('student :', student);
     return (
         <div className='grid grid-cols-2 gap-4 h-[90%]'>
             <div className='bg-blue-100 p-4 rounded-lg shadow-sm text-center flex flex-col items-center justify-center'>
