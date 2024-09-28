@@ -4,36 +4,29 @@ import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import ReferAFriend from './ReferAFriend';
 import TakeQuiz from './TakeQuiz';
 import axios from 'axios';
+import { useUserContext } from '../contexts/userContext';
+import Class from '../interface/Class';
 
 const UpcomingClasses = () => {
-    const [upcomingClasses, setUpcomingClasses] = useState([
-        {
-            id: '1',
-            teacherName: 'John Doe',
-            date: '2024-09-25',
-            time: '10:00 AM',
-        },
-        {
-            id: '2',
-            teacherName: 'Jane Smith',
-            date: '2024-09-26',
-            time: '2:00 PM',
-        },
-    ]);
+    const { userData } = useUserContext();
+    const [upcomingClasses, setUpcomingClasses] = useState<Class[]>([]);
 
     useEffect(() => {
         const fetchUpcomingClasses = async () => {
+            if (!userData?._id) return;
             try {
-                // Replace with your API call
-                const response = await axios.get('/api/upcomingClasses');
-                setUpcomingClasses(response.data);
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+                const response = await axios.post(`${apiUrl}/class/upcomingClasses`, {
+                    studentId: userData._id
+                });
+                setUpcomingClasses(response.data.upcomingClasses);
             } catch (error) {
                 console.error('Error fetching upcoming classes:', error);
             }
         };
 
         fetchUpcomingClasses();
-    }, []);
+    }, [userData?._id]);
 
     const today = new Date();
     const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -78,7 +71,9 @@ const UpcomingClasses = () => {
                         <span key={index} className="day text-gray-500 text-sm font-medium text-center">{day}</span>
                     ))}
                     {calendarDays.map((day) => {
-                        const classItem = upcomingClasses.find((item) => item.date === day.toISOString().split('T')[0]);
+                        const classItem = upcomingClasses.find((item) =>
+                            new Date(item.date).toISOString().split('T')[0] === day.toISOString().split('T')[0]
+                        );
                         return (
                             <button
                                 key={day.toISOString()}
@@ -94,22 +89,21 @@ const UpcomingClasses = () => {
                 </div>
                 <div className="mt-4">
                     {upcomingClasses.map((classItem) => (
-                        <div key={classItem.id} className="flex items-center justify-between mb-2 p-2 border-b border-gray-200">
+                        <div key={`${classItem._id}-${classItem.slot.slot}-${new Date(classItem.date).toISOString().split('T')[0]}`} className="flex items-center justify-between mb-2 p-2 border-b border-gray-200">
                             <span className="font-medium text-gray-700">{classItem.teacherName}</span>
-                            <span className="text-sm text-gray-500">{classItem.date} - {classItem.time}</span>
+                            <span className="text-sm text-gray-500">{new Date(classItem.date).toLocaleDateString()} - {classItem.slot.slot}</span>
                         </div>
                     ))}
                 </div>
             </div>
             <div className="flex flex-col sm:gap-4 ml-1 w-full">
-                <div className="mb-3 ">
+                <div className="mb-3">
                     <ReferAFriend />
                 </div>
-                <div className="mb-3 ">
+                <div className="mb-3">
                     <TakeQuiz />
                 </div>
             </div>
-
         </div>
     );
 };

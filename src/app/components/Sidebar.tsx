@@ -2,6 +2,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { IoHomeOutline, IoPersonOutline, IoMailOutline, IoSettingsOutline, IoLogOutOutline, IoMenuOutline } from 'react-icons/io5';
+import { FaChalkboardUser } from "react-icons/fa6";
+import { ImBooks } from "react-icons/im";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
@@ -47,6 +49,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           <Link href="/profile" className="flex flex-col items-center transition w-full" onClick={handleLinkClick}>
             <IoPersonOutline className="text-2xl" />
             <span className="mt-1">Profile</span>
+          </Link>
+        </li>
+        <li className="w-full flex flex-col items-center">
+          <Link href="/teachers" className="flex flex-col items-center transition w-full" onClick={handleLinkClick}>
+            <FaChalkboardUser className="text-2xl" />
+            <span className="mt-1">Teachers</span>
+          </Link>
+        </li>
+        <li className="w-full flex flex-col items-center">
+          <Link href="/profile" className="flex flex-col items-center transition w-full" onClick={handleLinkClick}>
+            <ImBooks className="text-2xl" />
+            <span className="mt-1">Notes</span>
           </Link>
         </li>
         <li className="w-full flex flex-col items-center">

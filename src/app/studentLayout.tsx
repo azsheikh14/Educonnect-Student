@@ -25,7 +25,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
   const isAuthPage = pathname === '/account/login' || pathname === '/account/signup';
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);

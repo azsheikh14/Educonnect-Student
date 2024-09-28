@@ -3,12 +3,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import { useUserContext } from '../contexts/userContext';
+import { useChatContext } from '../contexts/chatContext';
 import RecentChats from './recentChats';
 import axios from 'axios';
 import PulseLoader from '@/app/loaders/chatLoader';
 import { FaExternalLinkAlt, FaPaperPlane, FaArrowLeft } from 'react-icons/fa';
 import TeacherSelectModal from '@/app/modal/teacherSelectModal';
 import Teacher from '../interface/Teacher';
+import Link from 'next/link';
 
 // Socket connection
 const socket = io(process.env.NEXT_PUBLIC_API_URL!);
@@ -31,7 +33,7 @@ const StudentChatComponent = () => {
     const [message, setMessage] = useState('');
     const { userData } = useUserContext();
     const [recentChats, setRecentChats] = useState<Chat[]>([]);
-    const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+    const { currentChat, setCurrentChat } = useChatContext();
     const [loadingMessages, setLoadingMessages] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,33 @@ const StudentChatComponent = () => {
 
         fetchRecentChats();
     }, [userData]);
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            if (currentChat) {
+                setLoadingMessages(true);
+
+                try {
+                    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+                    const response = await axios.post(`${apiUrl}/chat/getChatById/`, {
+                        teacherId: currentChat.teacherId,
+                        userId: userData?._id,
+                    });
+
+                    if (response.status === 200) {
+                        setMessages(response.data.messages || []);
+                        setIsScrolling(true);
+                    }
+                } catch (error) {
+                    console.error("Error fetching chat messages:", error);
+                } finally {
+                    setLoadingMessages(false);
+                }
+            }
+        };
+
+        fetchMessages();
+    }, [currentChat]);
 
     useEffect(() => {
         socket.on('receiveMessage', (message: Message) => {
@@ -90,26 +119,6 @@ const StudentChatComponent = () => {
     const handleChatSelect = async (chat: Chat) => {
         setCurrentChat(chat);
         setMessages([]);
-        setLoadingMessages(true);
-
-        try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const response = await axios.post(`${apiUrl}/chat/getChatById/`, {
-                teacherId: chat.teacherId,
-                userId: userData?._id,
-            });
-
-            setMessages(response.data.messages || []);
-            setIsScrolling(true);
-            setShowRecentChats(false); // Hide recent chats when a chat is selected
-        } catch (error) {
-            console.error("Error fetching chat messages:", error);
-        } finally {
-            setLoadingMessages(false);
-            if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
     };
 
     const handleCreateNewChat = () => {
@@ -200,7 +209,9 @@ const StudentChatComponent = () => {
                             </div>
                             <h2 className="text-xl font-bold ml-5">{currentChat.teacherName}</h2>
                         </div>
-                        <FaExternalLinkAlt className='hidden md:block cursor-pointer' />
+                        <Link href={`/teacher?id=${currentChat.teacherId}`}>
+                            <FaExternalLinkAlt className='hidden md:block cursor-pointer' />
+                        </Link>
                     </div>
                 )}
 

@@ -12,6 +12,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        'custom-md': '1000px', // This custom breakpoint will be used
+        'custom-lg': '1300px',
+      },
     },
   },
   plugins: [],

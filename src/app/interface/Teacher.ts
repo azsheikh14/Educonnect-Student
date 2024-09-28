@@ -1,5 +1,4 @@
 interface Teacher {
-    id: string;
     _id: string;
     name: string;
     title: string;
@@ -7,7 +6,8 @@ interface Teacher {
     profilePic?: string;
     jobTitle?: string;
     languages: string[];
-    innovativeLearning: string[]
+    innovativeLearning: string[];
+    classes: string[];
     experience?: {
         year: string;
         position: string;
@@ -19,7 +19,7 @@ interface Teacher {
         degree: string;
         institution: string;
     }[];
-    availability?: string;
+    availability: Availability[];
     subjects?: string[];
     location?: string;
     contact: {
@@ -28,8 +28,10 @@ interface Teacher {
         website?: string;
     };
     experienceYears: number;
-    rating?: number; // Add rating
-    isAvailable?: boolean; // Add availability
+    rating?: number;
+    isAvailable?: boolean;
+    monthlyFee: number;
+    classesPerWeek: number;
 }
 
 interface Education {
@@ -43,6 +45,16 @@ interface Experience {
     position: string;
     company: string;
     description: string;
+}
+
+interface Classes {
+
+}
+
+export interface Availability {
+    day: string;  // Day of the week
+    start?: string; // Start time
+    end?: string;   // End time
 }
 
 export default Teacher;

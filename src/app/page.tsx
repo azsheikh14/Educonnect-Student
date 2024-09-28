@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, useState } from 'react';
 import UpcomingClasses from './components/UpcomingClasses';
 import TeacherCard from './components/TeacherCard';
 import MyProfile from './components/MyProfile';
@@ -13,9 +13,12 @@ import Cookies from 'js-cookie';
 import { getDataFromToken } from './utils/getDataFromToken';
 import axios from 'axios';
 import Loader from './loading';
+import Teacher from './interface/Teacher';
+import Link from 'next/link';
 
 const Home = () => {
   const { userData, setUserData } = useUserContext();
+  const [teachers, setTeachers] = useState<Teacher[]>([]); // New state for all teachers
   const router = useRouter();
 
   useEffect(() => {
@@ -31,7 +34,16 @@ const Home = () => {
         console.error('Error fetching user data:', error);
       }
     };
-
+    const fetchAllTeachers = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await axios.post(`${apiUrl}/teacher/getAllTeachers`);
+        setTeachers(response.data); // Setting all teachers
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      }
+    };
+    fetchAllTeachers()
     fetchUserData();
   }, [setUserData]);
 
@@ -45,7 +57,7 @@ const Home = () => {
   };
 
   return (
-    <div className="py-0 md:py-6 flex flex-col">
+    <div className="py-0 md:py-6 flex flex-col mx-3">
       <header className="flex flex-col md:flex-row justify-between items-center mb-4 mx-8">
         <div className="flex items-center mb-2 md:mb-0">
           <div className="w-[40px] h-[40px] bg-yellow-400 rounded-full"></div>
@@ -64,9 +76,11 @@ const Home = () => {
 
         {/* Group icons only on smaller screens */}
         <div className="flex gap-x-4 mb-2 md:mb-0">
-          <button className="text-gray-600 p-2 rounded-full hover:bg-gray-100">
-            <IoChatbubbleEllipsesOutline className="w-6 h-6" />
-          </button>
+          <Link href={'/messages'}>
+            <button className="text-gray-600 p-2 rounded-full hover:bg-gray-100">
+              <IoChatbubbleEllipsesOutline className="w-6 h-6" />
+            </button>
+          </Link>
           <button className="text-gray-600 p-2 rounded-full hover:bg-gray-100" onClick={handleLogout}>
             <IoLogOutOutline className="w-6 h-6" />
           </button>
@@ -77,7 +91,12 @@ const Home = () => {
         <div className="flex flex-col md:flex-row mb-6 justify-between w-full">
           <div className="flex flex-col justify-between items-center lg:w-full w-full">
             <div className="flex flex-col lg:flex-row justify-evenly w-full mb-4 mx-5">
-              {userData ? <MyProfile student={userData} /> : <Loader />}
+              <div className='w-full lg:w-2/5'>
+                {userData ? <MyProfile student={userData} /> : <Loader />}
+              </div>
+              <div className="hidden md:block mb-4">
+                <AssignedWork />
+              </div>
             </div>
             <div className="block lg:hidden mb-4 mx-5 w-full">
               <UpcomingClasses />
@@ -99,11 +118,17 @@ const Home = () => {
         </div>
 
         {/* Show Assigned Work on larger screens */}
-        <div className="hidden md:block mb-4">
+        {/* <div className="hidden md:block mb-4">
           <AssignedWork />
+        </div> */}
+        <div>
+          <h1 className="text-4xl font-bold text-center text-gray-900">Meet Our Teachers</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {teachers.map((teacher) => (
+              <TeacherCard key={teacher._id} teacher={teacher} /> // Render each TeacherCard
+            ))}
+          </div>
         </div>
-
-        <TeacherCard />
 
       </Suspense>
     </div>

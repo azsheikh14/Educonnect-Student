@@ -1,30 +1,43 @@
-// This page redirects to login if user is not logged in and blocks some pages if user is not logged in
-
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from "next/headers";
+import { checkSession } from './lib';
 
-export function middleware(request: NextRequest) {
-    const path = request.nextUrl.pathname
-    const isPublicPath = path === '/account/login' || path === '/account/signup'
+const publicPaths = ['/account/login', '/account/signup'];
 
-    const cookieStore = cookies()
-    const token = cookieStore.get("studentToken")?.value;
+export async function middleware(request: NextRequest) {
+    const token = request.cookies.get('studentToken')?.value;
+    const isPublicPath = publicPaths.some(path => request.nextUrl.pathname.startsWith(path));
 
-    if (isPublicPath && token) {
-        // return NextResponse.redirect(new URL('/', request.nextUrl))
+    // If the path is public, proceed without checking the token
+    if (isPublicPath) {
+        return NextResponse.next();
     }
 
-    if (!isPublicPath && !token) {
-        return NextResponse.redirect(new URL('/account/login', request.nextUrl))
+    // If the token is missing, redirect to login
+    if (!token) {
+        return NextResponse.redirect(new URL('/account/login', request.url));
     }
 
+    // If the token is invalid, redirect to login
+    const sessionResponse = await checkSession(token);
+    if (sessionResponse === false) {
+        return NextResponse.redirect(new URL('/account/login', request.url));
+    }
+
+    // If the sessionResponse is a response object, it means the token was renewed
+    if (sessionResponse instanceof NextResponse) {
+        return sessionResponse;
+    }
+
+    // If the token is valid, proceed to the requested path
+    return NextResponse.next();
 }
 
 export const config = {
     matcher: [
         '/',
-        '/chat/:path*',
-        '/account/login',
-        '/account/signup'
+        '/messages',
+        '/profile',
+        '/settings',
+        '/account/:path*',
     ],
-}
+};
