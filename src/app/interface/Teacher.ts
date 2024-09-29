@@ -47,10 +47,6 @@ interface Experience {
     description: string;
 }
 
-interface Classes {
-
-}
-
 export interface Availability {
     day: string;  // Day of the week
     start?: string; // Start time

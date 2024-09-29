@@ -1,12 +1,16 @@
-import { cookies } from "next/headers";
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { NextResponse } from "next/server";
 
 const secretKey = process.env.jwt_secret;
 const key = new TextEncoder().encode(secretKey);
 const RENEW_THRESHOLD = 10 * 60; // 10 minutes in seconds
 
-export async function encrypt(payload: any) {
+export interface CustomJWTPayload extends JWTPayload {
+    exp?: number; // exp is optional
+    [key: string]: any; // You can specify more precise types if you know the structure
+}
+
+export async function encrypt(payload: CustomJWTPayload) {
     return await new SignJWT(payload)
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
@@ -14,13 +18,13 @@ export async function encrypt(payload: any) {
         .sign(key);
 }
 
-export async function decrypt(token: string): Promise<any> {
+export async function decrypt(token: string): Promise<CustomJWTPayload | null> {
     try {
         const { payload } = await jwtVerify(token, key, {
             algorithms: ["HS256"],
         });
-        return payload;
-    } catch (error) {
+        return payload as CustomJWTPayload;
+    } catch {
         return null; // Token verification failed
     }
 }
@@ -28,7 +32,7 @@ export async function decrypt(token: string): Promise<any> {
 export async function checkSession(token: string): Promise<boolean | NextResponse> {
     const payload = await decrypt(token);
 
-    if (!payload) {
+    if (!payload || !payload.exp) {
         return false;
     }
 

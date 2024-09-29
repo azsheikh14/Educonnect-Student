@@ -49,10 +49,6 @@ const Teachers = () => {
         setSearchTerm(event.target.value);
     };
 
-    const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSortOption(event.target.value);
-    };
-
     const filteredTeachers = teachers
         .filter((teacher) =>
             teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) &&

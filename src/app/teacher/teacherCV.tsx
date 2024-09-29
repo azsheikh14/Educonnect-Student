@@ -1,16 +1,10 @@
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Teacher, { Education, Experience } from '@/app/interface/Teacher';
 import { FaEnvelope, FaPhone, FaGlobe } from 'react-icons/fa';
-import axios from 'axios';
 interface ProfileComponentProps {
     teacher: Teacher;
 }
 const TeacherCV:React.FC<ProfileComponentProps> = ({teacher}) => {
-    const searchParams = useSearchParams();
-    const id = searchParams.get('id');
-    
-
     return (
         <div className="min-h-screen flex mx-auto p-5">
             <div className="w-[1.5/5] bg-gray-700 text-white flex flex-col items-center">

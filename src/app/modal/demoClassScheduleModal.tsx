@@ -6,7 +6,7 @@ interface DemoClassScheduleModalProps {
     isOpen: boolean;
     onClose: () => void;
     teacher: Teacher | null;
-    onConfirm: (selectedOptions: { subjects: any; classes: any }) => void;
+    onConfirm: (selectedOptions: { subjects: MultiValue<{ value: string; label: string }>; classes: MultiValue<{ value: string; label: string }> }) => void;
 }
 
 const DemoClassScheduleModal: React.FC<DemoClassScheduleModalProps> = ({ isOpen, onClose, teacher, onConfirm }) => {

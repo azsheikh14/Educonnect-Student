@@ -2,7 +2,7 @@
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEnvelope, FaPhone, FaGlobe, FaCommentDots } from 'react-icons/fa';
+import { FaCommentDots } from 'react-icons/fa';
 import TeacherCV from './teacherCV';
 import Teacher from '../interface/Teacher';
 import { useChatContext } from '../contexts/chatContext';
@@ -13,23 +13,21 @@ import { useUserContext } from '../contexts/userContext';
 import DemoClassScheduleModal from '../modal/demoClassScheduleModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MultiValue } from 'react-select';
 
 const TeacherProfile = () => {
     const [teacher, setTeacher] = useState<Teacher | null>(null);
     const [teachers, setTeachers] = useState<Teacher[]>([]);
     const { setCurrentChat } = useChatContext();
     const searchParams = useSearchParams();
-    const id = searchParams.get('id');
-    const [isChatOpen, setIsChatOpen] = useState(false);
+    const id = searchParams.get('id') || ''; // Ensure id is always a string
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const { userData, setUserData } = useUserContext();
+    const { userData } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState<string>('');
 
     const handleOpenChat = (id: string, name: string) => {
         setCurrentChat({ teacherId: id, teacherName: name, lastMessage: '' });
-        setIsChatOpen(true);
         router.push('/messages');
     };
 
@@ -67,13 +65,13 @@ const TeacherProfile = () => {
         return `${hour}:${minutes} ${period}`;
     };
 
-    const getTimeSlots = (day: string, start: any, end: any) => {
+    const getTimeSlots = (day: string, start: string, end: string) => {
         const [startHour, startMinute] = start.split(':').map(Number);
         const [endHour, endMinute] = end.split(':').map(Number);
-        let slots = [];
+        const slots = [];
         for (let hour = startHour; hour < endHour; hour++) {
-            let startTime = `${hour}:${startMinute < 10 ? '0' + startMinute : startMinute}`;
-            let endTime = `${hour + 1}:${endMinute < 10 ? '0' + endMinute : endMinute}`;
+            const startTime = `${hour}:${startMinute < 10 ? '0' + startMinute : startMinute}`;
+            const endTime = `${hour + 1}:${endMinute < 10 ? '0' + endMinute : endMinute}`;
             slots.push(`${day} ${convertTo12HourFormat(startTime)} - ${convertTo12HourFormat(endTime)}`);
         }
         return slots;
@@ -87,22 +85,17 @@ const TeacherProfile = () => {
         setIsModalOpen(true);
     };
 
-    const handleConfirmSchedule = async (selectedOptions: { subjects: any[], classes: any[] }) => {
-        setLoading(true);
+    const handleConfirmSchedule = async (selectedOptions: { subjects: MultiValue<{ value: string; label: string }>; classes: MultiValue<{ value: string; label: string }> }) => {
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const selectedSlot = document.getElementById("availableSlots") as HTMLSelectElement;
-            const slotValue = selectedSlot.value;
-
-            console.log('slotValue :', slotValue);
-
+            const selectedSlotElement = document.getElementById("availableSlots") as HTMLSelectElement;
+            const slotValue = selectedSlotElement.value;
             const [day, startTime, endTime] = slotValue.split(' ');
             const timeSlot = `${startTime} - ${endTime}`;
-
             const subjectsValues = selectedOptions.subjects.map(subject => subject.value);
             const classesValues = selectedOptions.classes.map(cls => cls.value);
 
-            const response = await axios.post(`${apiUrl}/class/scheduleDemoClass`, {
+            await axios.post(`${apiUrl}/class/scheduleDemoClass`, {
                 slot: { day, slot: timeSlot },
                 teacherId: teacher?._id,
                 teacherName: teacher?.name,
@@ -113,12 +106,10 @@ const TeacherProfile = () => {
             });
 
             setIsModalOpen(false);
-            toast.success('Class scheduled successfully!'); // Show success toast
+            toast.success('Class scheduled successfully!');
         } catch (error) {
             console.error('Error scheduling class:', error);
-            toast.error('Failed to schedule the class. Please try again.'); // Show error toast
-        } finally {
-            setLoading(false);
+            toast.error('Failed to schedule the class. Please try again.');
         }
     };
 
@@ -153,7 +144,7 @@ const TeacherProfile = () => {
                             <option value="">Select a slot</option>
                             {teacher?.availability?.map((avail, index) => {
                                 const day = avail.day;
-                                const timeSlots = getTimeSlots(day, avail.start, avail.end);
+                                const timeSlots = getTimeSlots(day, avail.start || '', avail.end || ''); // Ensure start and end are strings
                                 return (
                                     <optgroup key={index} label={day}>
                                         {timeSlots.map((slot, i) => (
@@ -163,82 +154,15 @@ const TeacherProfile = () => {
                                 );
                             })}
                         </select>
-
                     </div>
-                    <button onClick={handleScheduleClass} className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" >
+                    <button onClick={handleScheduleClass} className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Schedule Class
                     </button>
                 </div>
-                <DemoClassScheduleModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    teacher={teacher}
-                    onConfirm={handleConfirmSchedule}
-                />
+                <DemoClassScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} teacher={teacher} onConfirm={handleConfirmSchedule} />
                 {teacher && (
-                    <button onClick={() => handleOpenChat(teacher._id, teacher.name)} className="w-full bg-green-600 text-white py-2 rounded-lg flex items-center justify-center hover:bg-green-700 transition duration-200 ease-in-out transform hover:scale-105" >
-                        <FaCommentDots className="mr-2" /> Message
-                    </button>
+                    <button onClick={() => handleOpenChat(teacher._id, teacher.name)} className="w-full bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Hire {teacher?.name}</button>
                 )}
-                {/* <div className="p-4 bg-white rounded-lg shadow">
-                    <h3 className="text-lg font-semibold mb-3">Availability</h3>
-                    <div className="grid grid-cols-7 gap-2 text-center">
-                        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day, dayIndex) => (
-                            <div key={day} className="font-semibold">{day}</div>
-                        ))}
-                        {[...Array(30)].map((_, index) => {
-                            const dayNumber = index + 1;
-                            const currentDate = new Date();
-                            currentDate.setDate(dayNumber);
-                            const currentDayName = currentDate.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2);
-
-                            const isAvailable = teacher?.availability?.some(avail => avail.day.slice(0, 2) === currentDayName);
-                            return (
-                                <div key={index} className={`p-2 ${isAvailable ? 'bg-green-200' : index % 7 === 0 ? 'bg-gray-200' : ''}`}>
-                                    {dayNumber}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div> */}
-                <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-start">
-                    <h3 className="text-3xl font-semibold mb-4 text-gray-900">Hire {teacher?.name}</h3>
-                    <div className="flex flex-col items-start bg-gray-50 p-4 rounded-lg w-full mb-4">
-                        <p className="text-xl font-bold text-green-600">Hourly Rate: ${teacher?.monthlyFee}</p>
-                        <p className="text-xl font-bold text-green-600">Classes Per Week: {teacher?.classesPerWeek}</p>
-                    </div>
-                    <p className="text-gray-700 mb-6">Hire {teacher?.name} for personalized lessons tailored to your unique learning goals.</p>
-                    <button className="w-full max-w-xs bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Hire Now
-                    </button>
-                </div>
-                <div className="p-6 bg-white rounded-lg shadow-md">
-                    <h3 className="text-2xl font-bold mb-4">Reviews and Ratings</h3>
-                    <div className="space-y-4">
-                        <div className="p-4 border border-gray-200 rounded-lg">
-                            <p className="font-semibold text-lg">John Smith</p>
-                            <p className="text-gray-700">"Great teacher! Highly recommend."</p>
-                            <div className="flex space-x-1 text-yellow-400 mt-2">
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9734;</span>
-                            </div>
-                        </div>
-                        <div className="p-4 border border-gray-200 rounded-lg">
-                            <p className="font-semibold text-lg">Jane Doe</p>
-                            <p className="text-gray-700">"Very knowledgeable and patient teacher."</p>
-                            <div className="flex space-x-1 text-yellow-400 mt-2">
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                                <span>&#9733;</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
