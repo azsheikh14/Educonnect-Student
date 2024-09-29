@@ -2,7 +2,6 @@
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaCommentDots } from 'react-icons/fa';
 import TeacherCV from './teacherCV';
 import Teacher from '../interface/Teacher';
 import { useChatContext } from '../contexts/chatContext';

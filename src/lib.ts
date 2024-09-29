@@ -6,8 +6,9 @@ const key = new TextEncoder().encode(secretKey);
 const RENEW_THRESHOLD = 10 * 60; // 10 minutes in seconds
 
 export interface CustomJWTPayload extends JWTPayload {
-    exp?: number; // exp is optional
-    [key: string]: any; // You can specify more precise types if you know the structure
+    exp?: number;
+    userId?: string;
+    roles?: string[];
 }
 
 export async function encrypt(payload: CustomJWTPayload) {
