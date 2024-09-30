@@ -11,19 +11,24 @@ type Chat = {
 type RecentChatsProps = {
     chats: Chat[];
     onChatSelect: (chat: Chat) => void;
-    onCreateNewChat: () => void; // New prop for creating a new chat
+    onCreateNewChat: () => void;
 };
 
 const RecentChats: React.FC<RecentChatsProps> = ({ chats, onChatSelect, onCreateNewChat }) => {
+    const truncateMessage = (message: string) => {
+        const words = message.split(' ');
+        return words.length > 5 ? `${words.slice(0, 5).join(' ')}...` : message;
+    };
+
     return (
-        <div className=" p-4 rounded">
+        <div className="p-4 rounded">
             <div className='bg-white w-full p-4 flex items-center rounded-full h-[10%]' onClick={onCreateNewChat}>
                 <div className='bg-blue-100 text-blue-600 p-4 rounded-full mr-5'>
                     <FaPlus className='bg-blue-100 text-blue-500 cursor-pointer' />
                 </div>
                 <p className='text-xl font-bold'>Create New</p>
             </div>
-            <div className='p-4 '>
+            <div className='p-4'>
                 <div className='flex justify-between items-center'>
                     <h2 className="text-2xl font-bold mb-4">Chat</h2>
                     <BsThreeDots className='text-2xl font-bold text-gray-500 cursor-pointer' />
@@ -44,7 +49,7 @@ const RecentChats: React.FC<RecentChatsProps> = ({ chats, onChatSelect, onCreate
                             </div>
                             <div className="ml-3">
                                 <strong>{chat.teacherName}</strong>
-                                <p className="text-sm text-gray-500">{chat.lastMessage}</p>
+                                <p className="text-sm text-gray-500">{truncateMessage(chat.lastMessage)}</p>
                             </div>
                         </li>
                     ))}

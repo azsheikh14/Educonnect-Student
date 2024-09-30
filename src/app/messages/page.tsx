@@ -11,6 +11,7 @@ import { FaExternalLinkAlt, FaPaperPlane, FaArrowLeft } from 'react-icons/fa';
 import TeacherSelectModal from '@/app/modal/teacherSelectModal';
 import Teacher from '../interface/Teacher';
 import Link from 'next/link';
+import DOMPurify from 'dompurify';
 
 // Socket connection
 const socket = io(process.env.NEXT_PUBLIC_API_URL!);
@@ -46,7 +47,8 @@ const StudentChatComponent = () => {
             try {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
                 const response = await axios.post(`${apiUrl}/chat/getRecentChats`, {
-                    userId: userData?._id
+                    userId: userData?._id,
+                    role: 'Student'
                 });
                 setRecentChats(response.data);
             } catch (error) {
@@ -58,35 +60,11 @@ const StudentChatComponent = () => {
     }, [userData]);
 
     useEffect(() => {
-        const fetchMessages = async () => {
-            if (currentChat) {
-                setLoadingMessages(true);
-
-                try {
-                    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                    const response = await axios.post(`${apiUrl}/chat/getChatById/`, {
-                        teacherId: currentChat.teacherId,
-                        userId: userData?._id,
-                    });
-
-                    if (response.status === 200) {
-                        setMessages(response.data.messages || []);
-                        setIsScrolling(true);
-                    }
-                } catch (error) {
-                    console.error("Error fetching chat messages:", error);
-                } finally {
-                    setLoadingMessages(false);
-                }
-            }
-        };
-
         fetchMessages();
-    }, [currentChat]);
 
-    useEffect(() => {
         socket.on('receiveMessage', (message: Message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
+            const cleanText = DOMPurify.sanitize(message.text);
+            setMessages((prevMessages) => [...prevMessages, { ...message, text: cleanText }]);
         });
 
         return () => {
@@ -116,9 +94,40 @@ const StudentChatComponent = () => {
         setMessage('');
     };
 
+    const fetchMessages = async () => {
+        if (currentChat) {
+            setLoadingMessages(true);
+
+            try {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+                const response = await axios.post(`${apiUrl}/chat/getChatById/`, {
+                    teacherId: currentChat.teacherId,
+                    userId: userData?._id,
+                });
+
+                if (response.status === 200) {
+                    setMessages(response.data.messages || []);
+                    setIsScrolling(true);
+                }
+            } catch (error) {
+                console.error("Error fetching chat messages:", error);
+            } finally {
+                setLoadingMessages(false);
+            }
+        }
+    };
+
     const handleChatSelect = async (chat: Chat) => {
-        setCurrentChat(chat);
-        setMessages([]);
+        if (currentChat?.teacherId === chat.teacherId) {
+            setCurrentChat(null);
+            setShowRecentChats(true);
+            setMessages([]);
+        } else {
+            setCurrentChat(chat);
+            setMessages([]);
+            setLoadingMessages(true);
+            fetchMessages()
+        }
     };
 
     const handleCreateNewChat = () => {
@@ -260,7 +269,7 @@ const StudentChatComponent = () => {
                                         {msg.senderId === userData?._id ? (
                                             <div className="flex items-end">
                                                 <div className={`p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl bg-pink-400 text-white text-right ${!isSameSender ? 'mr-0' : 'mr-11'} min-w-[120px]`}>
-                                                    <p className="text-md mb-1 font-semibold">{msg.text}</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg.text) }} />
                                                     <p className="text-xs mt-1">{formattedTimestamp}</p>
                                                 </div>
                                                 {!isSameSender && (
@@ -277,7 +286,7 @@ const StudentChatComponent = () => {
                                                     </div>
                                                 )}
                                                 <div className={`p-3 rounded-tl-xl rounded-tr-xl rounded-br-xl bg-blue-400 text-white ${!isSameSender ? 'ml-0' : 'ml-11'} min-w-[120px]`}>
-                                                    <p className="text-md mb-1 font-semibold">{msg.text}</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg.text) }} />
                                                     <p className="text-xs mt-1">{formattedTimestamp}</p>
                                                 </div>
                                             </div>

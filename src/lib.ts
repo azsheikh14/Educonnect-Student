@@ -40,12 +40,10 @@ export async function checkSession(token: string): Promise<boolean | NextRespons
     const currentTime = Math.floor(Date.now() / 1000);
     const timeLeft = payload.exp - currentTime;
 
-    // If the token is expired
     if (timeLeft <= 0) {
         return false;
     }
 
-    // If the token is about to expire within the threshold, renew it
     if (timeLeft < RENEW_THRESHOLD) {
         payload.exp = currentTime + 60 * 60; // 1 hour
         const newToken = await encrypt(payload);

@@ -9,9 +9,14 @@ interface Class {
     };
     date: Date;
     status: string;
-    notes: string;
-    type: string;
+    notes?: string;
+    type?: string;
+    subjects?: string[];
+    classes?: string[];
     isConfirmed: boolean;
+    jitsiLink: string;
+    isConfirmedByStudent: boolean;
+    isConfirmedByTeacher: boolean;
 };
 
 export default Class;

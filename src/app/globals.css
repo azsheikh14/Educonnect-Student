@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.chalk-text {
+    font-family: 'Caveat', cursive;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}

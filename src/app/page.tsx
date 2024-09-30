@@ -18,7 +18,7 @@ import Link from 'next/link';
 
 const Home = () => {
   const { userData, setUserData } = useUserContext();
-  const [teachers, setTeachers] = useState<Teacher[]>([]); // New state for all teachers
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const router = useRouter();
 
   useEffect(() => {

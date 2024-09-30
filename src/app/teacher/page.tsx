@@ -13,48 +13,56 @@ import DemoClassScheduleModal from '../modal/demoClassScheduleModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MultiValue } from 'react-select';
+import { FaChalkboardTeacher, FaDollarSign, FaHandshake } from 'react-icons/fa';
+import HireFormModal from '../modal/hireFormModal ';
+import Select from 'react-select';
 
 const TeacherProfile = () => {
-    const [teacher, setTeacher] = useState<Teacher | null>(null);
+    const [teacher, setTeacher] = useState<Teacher>();
     const [teachers, setTeachers] = useState<Teacher[]>([]);
     const { setCurrentChat } = useChatContext();
     const searchParams = useSearchParams();
-    const id = searchParams.get('id') || ''; // Ensure id is always a string
+    const id = searchParams.get('id') || '';
     const router = useRouter();
     const { userData } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState<string>('');
+    const [isHireModalOpen, setIsHireModalOpen] = useState(false);
 
     const handleOpenChat = (id: string, name: string) => {
         setCurrentChat({ teacherId: id, teacherName: name, lastMessage: '' });
         router.push('/messages');
     };
 
+    const fetchTeacher = async () => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const response = await axios.post(`${apiUrl}/teacher/getTeacher/${id}`);
+            setTeacher(response.data);
+            fetchAllTeachers(response.data);
+        } catch (error) {
+            console.error('Error fetching teacher:', error);
+        }
+    };
+
+    const fetchAllTeachers = async (teacherData: Teacher) => {
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const response = await axios.post(`${apiUrl}/teacher/getRelevantTeachers`, {
+                subjects: teacherData?.subjects,
+                classes: teacherData?.classes,
+                teacherId: teacherData._id
+            });
+            setTeachers(response.data);
+        } catch (error) {
+            console.error('Error fetching teachers:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchTeacher = async () => {
-            try {
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                const response = await axios.post(`${apiUrl}/teacher/getTeacher/${id}`);
-                setTeacher(response.data);
-            } catch (error) {
-                console.error('Error fetching teacher:', error);
-            }
-        };
-
-        const fetchAllTeachers = async () => {
-            try {
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                const response = await axios.post(`${apiUrl}/teacher/getAllTeachers`);
-                setTeachers(response.data);
-            } catch (error) {
-                console.error('Error fetching teachers:', error);
-            }
-        };
-
         if (id) {
             fetchTeacher();
         }
-        fetchAllTeachers();
     }, [id]);
 
     const convertTo12HourFormat = (time: string) => {
@@ -76,6 +84,15 @@ const TeacherProfile = () => {
         return slots;
     };
 
+    const availabilityOptions = teacher?.availability?.flatMap((avail) => {
+        const day = avail.day;
+        const timeSlots = getTimeSlots(day, avail.start || '', avail.end || '');
+        return timeSlots.map((slot) => ({
+            value: slot,
+            label: `${slot}`,
+        }));
+    }) || [];
+
     const handleScheduleClass = () => {
         if (!selectedSlot) {
             toast.warning('Please select a slot before scheduling the class');
@@ -87,10 +104,16 @@ const TeacherProfile = () => {
     const handleConfirmSchedule = async (selectedOptions: { subjects: MultiValue<{ value: string; label: string }>; classes: MultiValue<{ value: string; label: string }> }) => {
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const selectedSlotElement = document.getElementById("availableSlots") as HTMLSelectElement;
-            const slotValue = selectedSlotElement.value;
-            const [day, startTime, endTime] = slotValue.split(' ');
-            const timeSlot = `${startTime} - ${endTime}`;
+
+            const [day, ...timeParts] = selectedSlot.split(' ');
+
+            const timeSlot = timeParts.join(' ');
+
+            if (!timeSlot.includes('-')) {
+                console.error('Invalid time range format');
+                return;
+            }
+
             const subjectsValues = selectedOptions.subjects.map(subject => subject.value);
             const classesValues = selectedOptions.classes.map(cls => cls.value);
 
@@ -99,6 +122,7 @@ const TeacherProfile = () => {
                 teacherId: teacher?._id,
                 teacherName: teacher?.name,
                 studentId: userData?._id,
+                studentName: userData?.name,
                 studentEmail: userData?.email,
                 subjects: subjectsValues,
                 classes: classesValues
@@ -115,10 +139,10 @@ const TeacherProfile = () => {
     return (
         <div className="flex flex-col md:flex-row p-5 gap-4">
             <ToastContainer />
-            <div className="flex flex-col md:flex-row p-5 gap-4 w-4/5">
+            <div className="flex flex-col md:flex-row p-5 gap-4 w-full md:w-2/3">
                 <div className="w-full">
                     {teacher ? <TeacherCV teacher={teacher} /> : <TeacherCVLoader />}
-                    <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Meet Our Teachers</h1>
+                    <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Other Suggestions</h1>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6">
                         {teachers.map((teacher) => (
                             <TeacherCard key={teacher._id} teacher={teacher} />
@@ -134,35 +158,59 @@ const TeacherProfile = () => {
                     </div>
                     <p className="text-gray-700 ml-4">{teacher?.jobTitle}</p>
                 </div>
-                <div className="p-6 bg-white rounded-lg shadow-md flex flex-col items-center space-y-4">
+                <div className="p-6 bg-white rounded-lg flex flex-col items-center space-y-4">
                     <h3 className="text-2xl font-semibold text-center text-blue-600">Book a Demo Class</h3>
                     <p className="text-gray-600 text-center">Experience our teaching style and understand how we can help you achieve your learning goals. Schedule a demo class now!</p>
                     <div className="w-full">
                         <label htmlFor="availableSlots" className="block text-sm font-medium text-gray-700 mb-1">Available Slots</label>
-                        <select id="availableSlots" name="availableSlots" className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)} >
-                            <option value="">Select a slot</option>
-                            {teacher?.availability?.map((avail, index) => {
-                                const day = avail.day;
-                                const timeSlots = getTimeSlots(day, avail.start || '', avail.end || ''); // Ensure start and end are strings
-                                return (
-                                    <optgroup key={index} label={day}>
-                                        {timeSlots.map((slot, i) => (
-                                            <option key={`${index}-${i}`} value={slot}>{slot}</option>
-                                        ))}
-                                    </optgroup>
-                                );
-                            })}
-                        </select>
+                        <Select
+                            id="availableSlots"
+                            options={availabilityOptions}
+                            onChange={(option) => setSelectedSlot(option ? option.value : '')}
+                            placeholder="Select a slot"
+                            className="w-full"
+                            isClearable
+                        />
                     </div>
-                    <button onClick={handleScheduleClass} className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <button onClick={handleScheduleClass} className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Schedule Class
                     </button>
                 </div>
-                <DemoClassScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} teacher={teacher} onConfirm={handleConfirmSchedule} />
+                <div className="p-6 bg-white rounded-lg flex flex-col items-center space-y-4">
+                    <h3 className="text-2xl font-semibold text-blue-600">Pricing Details</h3>
+                    <div className="flex flex-col space-y-4 w-full">
+                        <div className="flex justify-between items-center p-4 bg-white rounded-lg border border-blue-200">
+                            <h4 className="text-lg font-medium text-gray-800 flex items-center">
+                                <FaDollarSign className="mr-2" />
+                                Monthly Fee
+                            </h4>
+                            <p className="text-2xl font-bold text-gray-900">${teacher?.monthlyFee}</p>
+                        </div>
+                        <div className="flex justify-between items-center p-4 bg-white rounded-lg border border-blue-200">
+                            <h4 className="text-lg font-medium text-gray-800 flex items-center">
+                                <FaChalkboardTeacher className="mr-2" />
+                                Classes Per Month
+                            </h4>
+                            <p className="text-2xl font-bold text-gray-900">{teacher?.classesPerMonth}</p>
+                        </div>
+                    </div>
+                    <button onClick={() => setIsHireModalOpen(true)} className="mt-4 w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center justify-center">
+                        <FaHandshake className="mr-2" />
+                        Hire Now
+                    </button>
+                </div>
                 {teacher && (
-                    <button onClick={() => handleOpenChat(teacher._id, teacher.name)} className="w-full bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Hire {teacher?.name}</button>
+                    <HireFormModal isOpen={isHireModalOpen} onClose={() => setIsHireModalOpen(false)} teacher={teacher} onOpenChat={() => handleOpenChat(teacher._id, teacher.name)} />
+                )}
+                {teacher && (
+                    <button onClick={() => handleOpenChat(teacher._id, teacher.name)} className="w-full bg-blue-600 text-white px-4 py-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Message {teacher?.name}
+                    </button>
                 )}
             </div>
+            {teacher && (
+                <DemoClassScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} teacher={teacher} onConfirm={handleConfirmSchedule} />
+            )}
         </div>
     );
 };

@@ -36,7 +36,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       if (window.innerWidth >= 768) { // md breakpoint
         setIsSidebarOpen(true);
       } else {
-        setIsSidebarOpen(false); // Hide sidebar on small screens
+        setIsSidebarOpen(false);
       }
     };
 

@@ -31,7 +31,7 @@ interface Teacher {
     rating?: number;
     isAvailable?: boolean;
     monthlyFee: number;
-    classesPerWeek: number;
+    classesPerMonth: number;
 }
 
 interface Education {
