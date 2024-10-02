@@ -130,6 +130,7 @@ const TeacherProfile = () => {
 
             setIsModalOpen(false);
             toast.success('Class scheduled successfully!');
+            toast.success('Please check your email for confirmation');
         } catch (error) {
             console.error('Error scheduling class:', error);
             toast.error('Failed to schedule the class. Please try again.');

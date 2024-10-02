@@ -97,7 +97,7 @@ const Classes = () => {
                         <h2 className="text-xl font-bold text-black chalk-text">{cls.teacherName}</h2>
                         <p className="chalk-text"><strong>Day:</strong> {cls.slot.day}</p>
                         <p className="chalk-text"><strong>Slot:</strong> {cls.slot.slot}</p>
-                        <p className="chalk-text"><strong>Date:</strong> {new Date(cls.date).toLocaleDateString()}</p>
+                        <p className="chalk-text"><strong>Date:</strong> {new Date(cls.classDate).toLocaleDateString()}</p>
                         <p className="chalk-text"><strong>Type:</strong> {cls.type}</p>
                         <p className="chalk-text"><strong>Status:</strong> {cls.isConfirmedByStudent ? 'Confirmed' : 'Pending'}</p>
                         <p className="chalk-text"><strong>Notes:</strong> {cls.notes || 'No notes available'}</p>

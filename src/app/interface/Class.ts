@@ -1,4 +1,5 @@
 interface Class {
+    classDate: string | number | Date;
     _id: string;
     studentId: string;
     teacherId: string;

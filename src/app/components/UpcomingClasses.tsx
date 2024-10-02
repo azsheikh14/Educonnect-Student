@@ -71,17 +71,12 @@ const UpcomingClasses = () => {
                         <span key={index} className="day text-gray-500 text-sm font-medium text-center">{day}</span>
                     ))}
                     {calendarDays.map((day) => {
-                        const classItem = upcomingClasses.find((item) =>
-                            new Date(item.date).toISOString().split('T')[0] === day.toISOString().split('T')[0]
-                        );
+                        const classItem = upcomingClasses.find((item) => {
+                            const itemDate = new Date(item.date);
+                            return itemDate.getDate() === day.getDate() && itemDate.getMonth() === day.getMonth() && itemDate.getFullYear() === day.getFullYear();
+                        });
                         return (
-                            <button
-                                key={day.toISOString()}
-                                className={`date border-0 w-[2.25rem] h-[2.25rem] flex items-center justify-center rounded-md font-semibold focus:outline-none ${classItem
-                                    ? 'bg-blue-100 text-blue-800 border-blue-100'
-                                    : 'bg-transparent text-gray-700 border-transparent'
-                                    }`}
-                            >
+                            <button key={day.toString()} className={`date border-0 w-[2.25rem] h-[2.25rem] flex items-center justify-center rounded-md font-semibold focus:outline-none ${classItem ? 'bg-blue-100 text-blue-800 border-blue-100' : 'bg-transparent text-gray-700 border-transparent'}`}>
                                 {day.getDate()}
                             </button>
                         );
@@ -89,9 +84,9 @@ const UpcomingClasses = () => {
                 </div>
                 <div className="mt-4">
                     {upcomingClasses.map((classItem) => (
-                        <div key={`${classItem._id}-${classItem.slot.slot}-${new Date(classItem.date).toISOString().split('T')[0]}`} className="flex items-center justify-between mb-2 p-2 border-b border-gray-200">
+                        <div key={`${classItem._id}-${classItem.slot.slot}-${new Date(classItem.classDate).getTime()}`} className="flex items-center justify-between mb-2 p-2 border-b border-gray-200">
                             <span className="font-medium text-gray-700">{classItem.teacherName}</span>
-                            <span className="text-sm text-gray-500">{new Date(classItem.date).toLocaleDateString()} - {classItem.slot.slot}</span>
+                            <span className="text-sm text-gray-500">{new Date(classItem.classDate || classItem.date).toLocaleDateString()} - {classItem.slot.slot}</span>
                         </div>
                     ))}
                 </div>
