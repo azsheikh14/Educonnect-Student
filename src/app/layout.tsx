@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import ClientLayout from './studentLayout';
 import { UserProvider } from './contexts/userContext';
 import { ChatProvider } from './contexts/chatContext';
+import { NotificationProvider } from './contexts/notificationContext';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,11 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <UserProvider>
-      <ChatProvider>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
-      </ChatProvider>
+      <NotificationProvider>
+        <ChatProvider>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
+        </ChatProvider>
+      </NotificationProvider>
     </UserProvider>
   )
 }

@@ -1,7 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
+/* Added for completeness */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-manrope: 'Manrope', sans-serif;
+  --font-mochiy: 'Mochiy Pop P One', sans-serif;
+  --font-racing: 'Racing Sans One', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-manrope), 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Set scrollbar width */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  /* For Firefox */
+}
+
+/* Hide scrollbar arrows and set track color */
+.scrollbar-track-rounded {
+  background: transparent;
+  /* Remove background color */
+  border-radius: 10px;
+  /* Rounded corners */
+}
+
+/* Customize thumb color */
+.scrollbar-thumb-rounded {
+  /* Thumb color */
+  border-radius: 10px;
+  /* Rounded corners */
+}
+
+.scrollbar-thin::-webkit-scrollbar-button {
+  display: none; /* Hides the arrows */
+}
+
+/* Change thumb color on hover */
+.hover\:scrollbar-thumb-rounded:hover {
+  background: rgba(85, 85, 85, 0.5);
+  /* Change thumb color on hover */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the scrollbar */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  /* Remove track background */
+  border-radius: 10px;
+  /* Rounded corners */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.5);
+  /* Thumb color */
+  border-radius: 10px;
+  /* Rounded corners */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.5);
+  /* Change thumb color on hover */
+}
+
+
+@keyframes bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-1rem);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 0.6s infinite;
+}
+
+@keyframes bounce200 {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-1rem);
+  }
+}
+
+.animate-bounce200 {
+  animation: bounce200 0.6s infinite 0.1s;
+  /* Delayed for second dot */
+}
+
+@keyframes bounce400 {
+
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-1rem);
+  }
+}
+
+.animate-bounce400 {
+  animation: bounce400 0.6s infinite 0.2s;
+  /* Delayed for third dot */
+}
 .chalk-text {
     font-family: 'Caveat', cursive;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import Select, { SingleValue } from 'react-select';
-import Teacher from '../interface/Teacher';
+import Teacher from '../interfaces/profile';
 
 interface HireFormModalProps {
     isOpen: boolean;

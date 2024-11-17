@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { getDataFromToken } from '../utils/getDataFromToken';
 import axios from 'axios';
-import Student from '@/app/interface/Student'; // Import your Student type
+import Student from '@/app/interfaces/Student'; // Import your Student type
 
 interface UserContextType {
   userData: Student | null; // Change to your actual user data type

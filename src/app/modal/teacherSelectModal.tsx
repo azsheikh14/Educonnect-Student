@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Teacher from '@/app/interface/Teacher'
+import Teacher from '@/app/interfaces/profile'
 
 type TeacherSelectModalProps = {
     onSelect: (teacher: Teacher) => void;

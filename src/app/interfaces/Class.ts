@@ -1,23 +1,25 @@
 interface Class {
-    classDate: string | number | Date;
     _id: string;
+    isNew: boolean;
+    studentProfilePic: string;
+    teacherProfilePic: string;
     studentId: string;
     teacherId: string;
     teacherName: string;
+    studentName: string;
     slot: {
         day: string;
         slot: string;
     };
-    date: Date;
+    classDate: string | string[];
     status: string;
-    notes?: string;
-    type?: string;
-    subjects?: string[];
-    classes?: string[];
+    type: string | null;
+    subjects: string[];
+    classes: string[];
     isConfirmed: boolean;
     jitsiLink: string;
     isConfirmedByStudent: boolean;
     isConfirmedByTeacher: boolean;
-};
+}
 
 export default Class;

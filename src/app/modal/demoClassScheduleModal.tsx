@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select, { MultiValue } from 'react-select';
-import Teacher from '../interface/Teacher';
+import Teacher from '../interfaces/profile';
 
 interface DemoClassScheduleModalProps {
     isOpen: boolean;

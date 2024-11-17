@@ -24,40 +24,49 @@ const FeaturedTeachers = () => {
       classesPerWeek: 4,
       imageUrl: '/bijju.png',
     },
+    {
+      id: 4,
+      name: 'Charlie Brown',
+      hourlyRate: '$35',
+      classesPerWeek: 4,
+      imageUrl: '/bijju.png',
+    },
   ];
 
   return (
-    <div className='py-6'>
-      <h2 className='text-2xl font-bold text-gray-800 mb-4'>Featured Teachers</h2>
-      <div className='flex flex-col gap-6'>
-        {teachers.map(teacher => (
-          <div key={teacher.id} className='bg-white p-4 flex items-center rounded-lg shadow-md'>
+    <div className='bg-white px-10 py-4 rounded-lg border-t border-gray-200'>
+      <div className='flex mb-4'>
+        <div className='w-2/12 font-bold text-gray-900 text-left'>Index</div>
+        <div className='w-4/12 font-bold text-gray-900 text-left'>Teacher</div>
+        <div className='w-2/12 font-bold text-gray-900 text-left'>Hourly Rate</div>
+        <div className='w-2/12 font-bold text-gray-900 text-left'>Classes/Week</div>
+        <div className='w-2/12 font-bold text-gray-900 text-right'>Actions</div>
+      </div>
+      {teachers.map((teacher, index) => (
+        <div
+          key={teacher.id}
+          className={`flex items-center py-4 ${index !== teachers.length - 1 ? 'border-b' : ''}`}
+        >
+          <div className='w-2/12 text-left'>{index + 1}</div> {/* Index column */}
+          <div className='w-4/12 text-left flex items-center'>
             <img
               src={teacher.imageUrl}
               alt={teacher.name}
-              className='w-16 h-16 rounded-full mr-4'
+              className='w-8 h-8 rounded-full mr-2'
             />
-            <div className='flex flex-col w-full'>
-              {/* Desktop layout */}
-              <div className='hidden sm:flex justify-evenly w-full '>
-                <h3 className='text-lg font-bold text-gray-900'>{teacher.name}</h3>
-                <p className='text-md text-gray-600'>{teacher.hourlyRate}/class</p>
-                <p className='text-md text-gray-600'>{teacher.classesPerWeek} classes/week</p>
-                <FaExternalLinkAlt className='text-gray-500 hover:text-blue-500 cursor-pointer' />
-              </div>
-
-              {/* Mobile layout */}
-              <div className='flex flex-col sm:hidden justify-evenly w-full p-4'>
-                <h3 className='text-lg font-bold text-gray-900 text-center'>{teacher.name}</h3>
-                <p className='text-md text-gray-600 text-center'>{teacher.hourlyRate}/class</p>
-                <p className='text-md text-gray-600 text-center'>{teacher.classesPerWeek} classes/week</p>
-                <FaExternalLinkAlt className='text-gray-500 hover:text-blue-500 cursor-pointer self-center mt-2' />
-              </div>
-
-            </div>
+            <h3 className='text-lg font-bold text-gray-900'>{teacher.name}</h3>
           </div>
-        ))}
-      </div>
+          <div className='w-2/12 text-left'>
+            <p className='text-md text-gray-600'>{teacher.hourlyRate}/class</p>
+          </div>
+          <div className='w-2/12 text-left'>
+            <p className='text-md text-gray-600'>{teacher.classesPerWeek} classes/week</p>
+          </div>
+          <div className='w-2/12 flex justify-end'>
+            <FaExternalLinkAlt className='cursor-pointer mr-4' />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

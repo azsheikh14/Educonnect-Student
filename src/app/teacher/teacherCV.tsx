@@ -1,5 +1,5 @@
 import React from 'react';
-import Teacher, { Education, Experience } from '@/app/interface/Teacher';
+import Teacher, { Education, Experience } from '@/app/interfaces/profile';
 import { FaEnvelope, FaPhone, FaGlobe } from 'react-icons/fa';
 interface ProfileComponentProps {
     teacher: Teacher;
@@ -57,10 +57,9 @@ const TeacherCV:React.FC<ProfileComponentProps> = ({teacher}) => {
                                 <div key={index} className="mb-4">
                                     <h4 className="font-semibold">{edu.year}</h4>
                                     <p>{edu.degree}</p>
-                                    <p>{edu.institution}</p>
+                                    <p>{edu.institute}</p>
                                 </div>
                             ))}
-
                         </div>
                     </div>
                 </div>

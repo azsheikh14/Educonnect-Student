@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import TeacherCV from './teacherCV';
-import Teacher from '../interface/Teacher';
+import Teacher from '../interfaces/profile';
 import { useChatContext } from '../contexts/chatContext';
 import { useRouter } from 'next/navigation';
 import TeacherCard from '../components/TeacherCard';
@@ -30,7 +30,7 @@ const TeacherProfile = () => {
     const [isHireModalOpen, setIsHireModalOpen] = useState(false);
 
     const handleOpenChat = (id: string, name: string) => {
-        setCurrentChat({ teacherId: id, teacherName: name, lastMessage: '' });
+        setCurrentChat({ teacherId: id, teacherName: name, lastMessage: '', teacherProfilePic: '' });
         router.push('/messages');
     };
 
@@ -192,7 +192,7 @@ const TeacherProfile = () => {
                                 <FaChalkboardTeacher className="mr-2" />
                                 Classes Per Month
                             </h4>
-                            <p className="text-2xl font-bold text-gray-900">{teacher?.classesPerMonth}</p>
+                            <p className="text-2xl font-bold text-gray-900">{teacher?.classesPerWeek}</p>
                         </div>
                     </div>
                     <button onClick={() => setIsHireModalOpen(true)} className="mt-4 w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200 flex items-center justify-center">

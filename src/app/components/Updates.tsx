@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaChalkboardTeacher, FaCalendarAlt, FaCheckCircle, FaTasks, FaMedal, FaRegCommentDots } from 'react-icons/fa';
-import Student from '@/app/interface/Student'
+import Student from '@/app/interfaces/Student'
 
 interface UpdateComponentProps {
     student: Student;

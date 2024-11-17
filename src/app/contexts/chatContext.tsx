@@ -5,7 +5,8 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 type Chat = {
     teacherId: string;
     teacherName: string;
-    lastMessage: string;
+    teacherProfilePic: string;
+    lastMessage?: string;
 };
 
 type ChatContextType = {
