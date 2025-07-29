@@ -1,99 +1,117 @@
 import React from 'react';
 import Teacher, { Education, Experience } from '@/app/interfaces/profile';
-import { FaEnvelope, FaPhone, FaGlobe } from 'react-icons/fa';
 interface ProfileComponentProps {
     teacher: Teacher;
 }
-const TeacherCV:React.FC<ProfileComponentProps> = ({teacher}) => {
+const TeacherCV: React.FC<ProfileComponentProps> = ({ teacher }) => {
     return (
-        <div className="min-h-screen flex mx-auto p-5">
-            <div className="w-[1.5/5] bg-gray-700 text-white flex flex-col items-center">
-                <img src="/bijju.png" alt={`${teacher.name}'s profile picture`} className="h-[340px] object-cover" />
-                < div className='bg-[rgb(34,34,34)] w-full px-2 text-center py-4' >
-                    <h1 className="text-5xl font-bold mb-3">{teacher.name}</h1>
-                    <h2 className="text-lg">{teacher.jobTitle}</h2>
-                </div >
-                <div className="text-left w-full px-5 py-3 mt-3">
-                    <div className='mb-8'>
-                        <h3 className="font-bold mb-1">TEACHING SUBJECTS</h3>
-                        <ul className="list-disc list-inside mb-2 space-y-3">
-                            {teacher.subjects && Array.isArray(teacher.subjects) && teacher.subjects.map((subject: string, index: number) => (
-                                <li key={index}>{subject}</li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='mb-8'>
-                        <h3 className="font-bold mb-1">INNOVATIVE TEACHING METHODS</h3>
-                        <ul className="list-disc list-inside mb-2 space-y-3">
-                            {teacher.innovativeLearning && Array.isArray(teacher.innovativeLearning) && teacher.innovativeLearning.map((innovativeLearning: string, index: number) => (
-                                <li key={index}>{innovativeLearning}</li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='mb-8'>
-                        <h3 className="font-bold mb-2">CLASSES</h3>
-                        <ul className="list-disc list-inside mb-4 space-y-3">
-                            {teacher.classes && Array.isArray(teacher.classes) && teacher.classes.map((classes: string, index: number) => (
-                                <li key={index}>{classes}</li>
-                            ))}
-                        </ul>
-                    </div>
+        <div className="space-y-4">
+            <div className='bg-white rounded-lg p-4 flex'>
+                <img src={teacher.profilePic || '/svg/noPic.svg'} alt={`${teacher.name}'s profile picture`} className="w-24 h-24 rounded-full" />
+                <div className='flex flex-col justify-center ml-4'>
+                    <p className='text-xl font-medium'>{teacher.name}</p>
+                    <p className="text-sm text-gray-500 mb-2">{teacher.jobTitle}</p>
+                    <p className="text-sm">{teacher.bio}</p>
                 </div>
-            </div >
-            <div className="bg-orange-500">
-                <div className='bg-gray-300 py-3'>
-                    <div className="mb-8 ml-32">
-                        <h3 className="text-xl font-bold mb-3">PROFILE</h3>
-                        <p className='w-4/5'>{teacher.bio}</p>
-                    </div>
-                    <div className="mb-2 flex">
-                        <div className="relative flex-none w-32"> {/* Adjust width as needed */}
-                            <h3 className="text-2xl font-bold rotate-[270deg] absolute top-1/2 left-0 transform -translate-y-1/2 whitespace-nowrap">
-                                EDUCATION
-                            </h3>
-                        </div>
-                        <div className=""> {/* Adjust margin as needed to avoid overlap */}
-                            {teacher.qualifications && Array.isArray(teacher.qualifications) && teacher.qualifications.map((edu: Education, index: number) => (
-                                <div key={index} className="mb-4">
-                                    <h4 className="font-semibold">{edu.year}</h4>
-                                    <p>{edu.degree}</p>
-                                    <p>{edu.institute}</p>
+            </div>
+            <div className='bg-white rounded-lg p-4 flex space-x-3'>
+                <div className='bg-gray-50 p-4 rounded-lg w-1/3'>
+                    <p className='text-lg font-medium mb-4'>Subjects</p>
+                    <div className=''>
+                        {teacher.subjects && Array.isArray(teacher.subjects) && teacher.subjects.map((subject: string, index: number) => (
+                            <div key={index} className='flex mb-2 items-center'>
+                                <div className='w-8 h-8 rounded-full bg-blue-500 flex justify-center items-center'>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V17H6C4.89543 17 4 17.8954 4 19ZM4 19C4 20.1046 4.89543 21 6 21H20M9 7H15M9 11H15M19 17V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-                <div className="flex py-5 bg-white">
-                    <div className="relative flex-none w-32"> {/* Adjust width as needed */}
-                        <h3 className="text-2xl font-bold rotate-[270deg] absolute top-60 left-0 transform -translate-y-1/2 whitespace-nowrap">
-                            EXPERIENCE
-                        </h3>
-                    </div>
-                    <div className=""> {/* Adjust margin as needed to avoid overlap */}
-                        {teacher.experience && Array.isArray(teacher.experience) && teacher.experience.map((exp: Experience, index: number) => (
-                            <div key={index} className="mb-4">
-                                <h4 className="font-semibold">{exp.year}</h4>
-                                <p>{exp.position}</p>
-                                <p>{exp.company}</p>
-                                <p>{exp.description}</p>
+                                <p key={index} className='ml-2'>{subject}</p>
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className='text-white px-16 py-4'>
-                    <h3 className="text-2xl font-bold mb-4">CONTACT</h3>
-                    <div className="flex items-center mb-2">
-                        <FaEnvelope className="mr-2" /> {/* Email icon */}
-                        <p>Email: {teacher.contact?.email}</p>
+                <div className='bg-gray-50 p-4 rounded-lg w-2/5'>
+                    <p className='text-lg font-medium mb-4'>Teaching Methods</p>
+                    <div className=''>
+                        {teacher.innovativeLearning && Array.isArray(teacher.innovativeLearning) && teacher.innovativeLearning.map((innovativeLearning: string, index: number) => (
+                            <div className='flex mb-2 items-center'>
+                                <div className='w-8 h-8 rounded-full bg-red-500 flex justify-center items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21.7906 1.5H11.2469C10.0287 1.5 9.03754 2.49115 9.03754 3.70935V10.4731L7.07977 9.49951C7.01367 9.46655 6.94647 9.43542 6.87872 9.40594C7.45349 8.80591 7.8078 7.99292 7.8078 7.09845C7.8078 5.25732 6.31 3.75934 4.46887 3.75934C2.62756 3.75934 1.12976 5.25732 1.12976 7.09845C1.12976 8.09894 1.57269 8.99762 2.27216 9.61011C0.984009 10.3348 0 11.7486 0 13.5V15.7593C0 16.732 0.631531 17.5598 1.50623 17.8541V21.7844C1.50623 22.1726 1.82098 22.4875 2.20935 22.4875H6.72803C7.11639 22.4875 7.43115 22.1726 7.43115 21.7844V13.8843L9.68225 15.0097C10.5438 15.4404 11.7123 15.1837 12.2408 14.2031H14.7618L12.0923 21.544C11.9595 21.9089 12.1479 22.3125 12.5129 22.4451C12.93 22.5969 13.301 22.3352 13.4139 22.0247L16.2581 14.2031H16.751L19.6243 22.0269C19.7335 22.3237 20.1017 22.6005 20.5269 22.4443C20.8912 22.3105 21.0784 21.9066 20.9443 21.542L18.249 14.2031H21.7906C22.9852 14.2031 24 13.2394 24 11.9938V3.70935C24 2.4635 22.9852 1.5 21.7906 1.5ZM2.53601 7.09845C2.53601 6.03259 3.40302 5.16559 4.46869 5.16559C5.53455 5.16559 6.40155 6.03259 6.40155 7.09845C6.40155 8.16412 5.53455 9.03113 4.46869 9.03113C3.40302 9.03113 2.53601 8.16412 2.53601 7.09845ZM11.0391 13.4513C11.0372 13.4564 11.0354 13.4617 11.0338 13.467C10.9858 13.6009 10.8774 13.7137 10.7446 13.7682C10.6042 13.8254 10.4462 13.8193 10.3112 13.752C8.97418 13.0831 7.04224 12.1179 7.04224 12.1179C6.57568 11.8846 6.0249 12.2245 6.0249 12.7469V21.0813H2.91248V17.2656C2.91248 16.8774 2.59753 16.5624 2.20935 16.5624C1.76642 16.5624 1.40625 16.2023 1.40625 15.7593V13.5C1.40625 11.7819 2.80518 10.4376 4.46869 10.4376H5.08997C5.56128 10.4376 6.03204 10.5482 6.45264 10.7582C6.45264 10.7582 9.94025 12.4926 10.8285 12.9349C11.0187 13.0294 11.1092 13.2513 11.0391 13.4513ZM22.5938 11.9938C22.5938 12.2086 22.5104 12.4102 22.3588 12.5618C22.2096 12.7112 22.0025 12.7969 21.7906 12.7969H12.3937C12.3924 12.793 12.3915 12.7892 12.3902 12.7855L14.1352 9.29572C14.3088 8.94836 14.1682 8.52612 13.8208 8.35236C13.4736 8.17877 13.0512 8.3194 12.8774 8.66675L11.3892 11.6431C11.1118 11.5049 10.7893 11.3443 10.4438 11.1725V3.70935C10.4438 3.2666 10.804 2.90625 11.2469 2.90625H21.7906C22.0025 2.90625 22.2096 2.99194 22.359 3.14172C22.5104 3.29297 22.5938 3.49457 22.5938 3.70935V11.9938Z" fill="white" />
+                                        <path d="M20.2842 4.51172H12.7529C12.3646 4.51172 12.0498 4.82648 12.0498 5.21484C12.0498 5.60321 12.3646 5.91797 12.7529 5.91797H20.2842C20.6724 5.91797 20.9874 5.60321 20.9874 5.21484C20.9874 4.82648 20.6726 4.51172 20.2842 4.51172Z" fill="white" />
+                                        <path d="M20.2843 7.14844H16.5186C16.1304 7.14844 15.8154 7.4632 15.8154 7.85156C15.8154 8.23993 16.1304 8.55469 16.5186 8.55469H20.2843C20.6725 8.55469 20.9874 8.23993 20.9874 7.85156C20.9874 7.4632 20.6727 7.14844 20.2843 7.14844Z" fill="white" />
+                                        <path d="M20.2843 9.7832H16.5186C16.1304 9.7832 15.8154 10.098 15.8154 10.4863C15.8154 10.8745 16.1304 11.1895 16.5186 11.1895H20.2843C20.6725 11.1895 20.9874 10.8745 20.9874 10.4863C20.9874 10.098 20.6727 9.7832 20.2843 9.7832Z" fill="white" />
+                                    </svg>
+                                </div>
+                                <p key={index} className='ml-2'>{innovativeLearning}</p>
+                            </div>
+                        ))}
                     </div>
-                    <div className="flex items-center mb-2">
-                        <FaPhone className="mr-2" /> {/* Phone icon */}
-                        <p>Phone: {teacher.contact?.phone}</p>
+                </div>
+                <div className='bg-gray-50 p-4 rounded-lg w-1/3'>
+                    <p className='text-lg font-medium mb-4'>Classes</p>
+                    <div className=''>
+                        {teacher.classes && Array.isArray(teacher.classes) && teacher.classes.map((classes: string, index: number) => (
+                            <div className='flex mb-2 items-center'>
+                                <div className='w-8 h-8 rounded-full bg-green-500 flex justify-center items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                        <path d="M22.6668 14.134C22.6671 13.1975 22.4362 12.2754 21.9944 11.4496C21.5527 10.6238 20.9138 9.91991 20.1346 9.40042C19.3553 8.88092 18.4599 8.56192 17.5277 8.47174C16.5955 8.38156 15.6555 8.523 14.7911 8.8835C13.9268 9.24399 13.1648 9.81239 12.573 10.5382C11.9811 11.264 11.5777 12.1247 11.3985 13.0439C11.2193 13.9632 11.2699 14.9124 11.5459 15.8074C11.8218 16.7023 12.3144 17.5153 12.9801 18.174L11.7935 20.2274C11.7374 20.3251 11.7053 20.4347 11.6997 20.5472C11.6942 20.6597 11.7154 20.772 11.7615 20.8747C11.8077 20.9775 11.8776 21.0678 11.9654 21.1384C12.0532 21.209 12.1565 21.2577 12.2668 21.2807L13.4535 21.5207L14.2535 22.4274C14.3203 22.5028 14.4025 22.5632 14.4944 22.6045C14.5863 22.6459 14.686 22.6673 14.7868 22.6674C14.9107 22.6656 15.032 22.6323 15.1394 22.5704C15.2467 22.5086 15.3365 22.4203 15.4001 22.314L16.8401 19.8207H17.1201L18.5601 22.314C18.6171 22.4108 18.6961 22.4927 18.7907 22.5532C18.8854 22.6137 18.9929 22.6509 19.1047 22.662C19.2164 22.673 19.3292 22.6575 19.4338 22.6168C19.5385 22.576 19.632 22.5111 19.7068 22.4274L20.5068 21.5207L21.6935 21.2807C21.8038 21.2577 21.907 21.209 21.9949 21.1384C22.0827 21.0678 22.1525 20.9775 22.1987 20.8747C22.2449 20.772 22.2661 20.6597 22.2605 20.5472C22.255 20.4347 22.2229 20.3251 22.1668 20.2274L20.9801 18.174C21.5148 17.6459 21.9393 17.0168 22.2288 16.3233C22.5184 15.6297 22.6673 14.8856 22.6668 14.134ZM12.7135 14.134C12.7135 13.2902 12.9637 12.4652 13.4325 11.7636C13.9013 11.0619 14.5677 10.5151 15.3473 10.1921C16.127 9.86921 16.9849 9.78472 17.8125 9.94935C18.6402 10.114 19.4004 10.5203 19.9971 11.117C20.5938 11.7137 21.0002 12.474 21.1648 13.3016C21.3294 14.1293 21.2449 14.9872 20.922 15.7668C20.5991 16.5464 20.0522 17.2128 19.3506 17.6816C18.6489 18.1505 17.824 18.4007 16.9801 18.4007C15.8491 18.3989 14.7649 17.9488 13.9651 17.1491C13.1653 16.3493 12.7152 15.2651 12.7135 14.134ZM14.6668 20.7474L14.3601 20.4007C14.2589 20.2856 14.1234 20.2061 13.9735 20.174L13.5268 20.0807L14.1268 19.0407C14.5089 19.2655 14.9161 19.4445 15.3401 19.574L14.6668 20.7474ZM20.4468 20.0807L20.0001 20.174C19.8502 20.2061 19.7146 20.2856 19.6135 20.4007L19.3068 20.7474L18.6401 19.5807C19.0641 19.4511 19.4713 19.2721 19.8535 19.0474L20.4468 20.0807Z" fill="white" />
+                                        <path d="M21.6268 2.37401C21.2976 2.04291 20.9059 1.78048 20.4745 1.60195C20.043 1.42342 19.5804 1.33235 19.1135 1.33401H4.88683C3.94443 1.33401 3.04062 1.70837 2.37424 2.37475C1.70786 3.04113 1.3335 3.94494 1.3335 4.88734V14.8473C1.3335 15.314 1.42541 15.776 1.60398 16.2071C1.78255 16.6383 2.04429 17.03 2.37424 17.3599C2.7042 17.6899 3.09592 17.9516 3.52703 18.1302C3.95814 18.3088 4.4202 18.4007 4.88683 18.4007H10.5735V16.9807H4.88683C4.32103 16.9807 3.77841 16.7559 3.37833 16.3558C2.97826 15.9558 2.7535 15.4131 2.7535 14.8473V4.88734C2.7535 4.32154 2.97826 3.77892 3.37833 3.37885C3.77841 2.97877 4.32103 2.75401 4.88683 2.75401H19.1135C19.6793 2.75401 20.2219 2.97877 20.622 3.37885C21.0221 3.77892 21.2468 4.32154 21.2468 4.88734V7.73401H22.6668V4.88734C22.6685 4.42042 22.5774 3.95782 22.3989 3.52637C22.2204 3.09493 21.9579 2.70323 21.6268 2.37401Z" fill="white" />
+                                        <path d="M5.6001 4.88672H18.4001V6.30672H5.6001V4.88672Z" fill="white" />
+                                        <path d="M5.6001 9.1543H9.86677V10.5743H5.6001V9.1543Z" fill="white" />
+                                        <path d="M5.6001 13.4199H9.86677V14.8399H5.6001V13.4199Z" fill="white" />
+                                    </svg>
+                                </div>
+                                <p key={index} className='ml-2'>{classes}</p>
+                            </div>
+                        ))}
                     </div>
-                    <div className="flex items-center">
-                        <FaGlobe className="mr-2" /> {/* Website icon */}
-                        <p>Website: {teacher.contact?.website}</p>
-                    </div>
+                </div>
+            </div>
+            <div className='bg-white rounded-lg p-4'>
+                <p className='text-lg font-medium mb-4'>Education</p>
+                <div className='grid grid-cols-3 space-x-4'>
+                    {teacher.qualifications && Array.isArray(teacher.qualifications) && teacher.qualifications.map((edu: Education, index: number) => (
+                        <div key={index} className='bg-gray-50 rounded-lg p-4'>
+                            <div className='w-8 h-8 rounded-full bg-red-500 flex items-center justify-center mb-3'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M22.6668 14.134C22.6671 13.1975 22.4362 12.2754 21.9944 11.4496C21.5527 10.6238 20.9138 9.91991 20.1346 9.40042C19.3553 8.88092 18.4599 8.56192 17.5277 8.47174C16.5955 8.38156 15.6555 8.523 14.7911 8.8835C13.9268 9.24399 13.1648 9.81239 12.573 10.5382C11.9811 11.264 11.5777 12.1247 11.3985 13.0439C11.2193 13.9632 11.2699 14.9124 11.5459 15.8074C11.8218 16.7023 12.3144 17.5153 12.9801 18.174L11.7935 20.2274C11.7374 20.3251 11.7053 20.4347 11.6997 20.5472C11.6942 20.6597 11.7154 20.772 11.7615 20.8747C11.8077 20.9775 11.8776 21.0678 11.9654 21.1384C12.0532 21.209 12.1565 21.2577 12.2668 21.2807L13.4535 21.5207L14.2535 22.4274C14.3203 22.5028 14.4025 22.5632 14.4944 22.6045C14.5863 22.6459 14.686 22.6673 14.7868 22.6674C14.9107 22.6656 15.032 22.6323 15.1394 22.5704C15.2467 22.5086 15.3365 22.4203 15.4001 22.314L16.8401 19.8207H17.1201L18.5601 22.314C18.6171 22.4108 18.6961 22.4927 18.7907 22.5532C18.8854 22.6137 18.9929 22.6509 19.1047 22.662C19.2164 22.673 19.3292 22.6575 19.4338 22.6168C19.5385 22.576 19.632 22.5111 19.7068 22.4274L20.5068 21.5207L21.6935 21.2807C21.8038 21.2577 21.907 21.209 21.9949 21.1384C22.0827 21.0678 22.1525 20.9775 22.1987 20.8747C22.2449 20.772 22.2661 20.6597 22.2605 20.5472C22.255 20.4347 22.2229 20.3251 22.1668 20.2274L20.9801 18.174C21.5148 17.6459 21.9393 17.0168 22.2288 16.3233C22.5184 15.6297 22.6673 14.8856 22.6668 14.134ZM12.7135 14.134C12.7135 13.2902 12.9637 12.4652 13.4325 11.7636C13.9013 11.0619 14.5677 10.5151 15.3473 10.1921C16.127 9.86921 16.9849 9.78472 17.8125 9.94935C18.6402 10.114 19.4004 10.5203 19.9971 11.117C20.5938 11.7137 21.0002 12.474 21.1648 13.3016C21.3294 14.1293 21.2449 14.9872 20.922 15.7668C20.5991 16.5464 20.0522 17.2128 19.3506 17.6816C18.6489 18.1505 17.824 18.4007 16.9801 18.4007C15.8491 18.3989 14.7649 17.9488 13.9651 17.1491C13.1653 16.3493 12.7152 15.2651 12.7135 14.134ZM14.6668 20.7474L14.3601 20.4007C14.2589 20.2856 14.1234 20.2061 13.9735 20.174L13.5268 20.0807L14.1268 19.0407C14.5089 19.2655 14.9161 19.4445 15.3401 19.574L14.6668 20.7474ZM20.4468 20.0807L20.0001 20.174C19.8502 20.2061 19.7146 20.2856 19.6135 20.4007L19.3068 20.7474L18.6401 19.5807C19.0641 19.4511 19.4713 19.2721 19.8535 19.0474L20.4468 20.0807Z" fill="white" />
+                                    <path d="M21.6268 2.37401C21.2976 2.04291 20.9059 1.78048 20.4745 1.60195C20.043 1.42342 19.5804 1.33235 19.1135 1.33401H4.88683C3.94443 1.33401 3.04062 1.70837 2.37424 2.37475C1.70786 3.04113 1.3335 3.94494 1.3335 4.88734V14.8473C1.3335 15.314 1.42541 15.776 1.60398 16.2071C1.78255 16.6383 2.04429 17.03 2.37424 17.3599C2.7042 17.6899 3.09592 17.9516 3.52703 18.1302C3.95814 18.3088 4.4202 18.4007 4.88683 18.4007H10.5735V16.9807H4.88683C4.32103 16.9807 3.77841 16.7559 3.37833 16.3558C2.97826 15.9558 2.7535 15.4131 2.7535 14.8473V4.88734C2.7535 4.32154 2.97826 3.77892 3.37833 3.37885C3.77841 2.97877 4.32103 2.75401 4.88683 2.75401H19.1135C19.6793 2.75401 20.2219 2.97877 20.622 3.37885C21.0221 3.77892 21.2468 4.32154 21.2468 4.88734V7.73401H22.6668V4.88734C22.6685 4.42042 22.5774 3.95782 22.3989 3.52637C22.2204 3.09493 21.9579 2.70323 21.6268 2.37401Z" fill="white" />
+                                    <path d="M5.6001 4.88672H18.4001V6.30672H5.6001V4.88672Z" fill="white" />
+                                    <path d="M5.6001 9.1543H9.86677V10.5743H5.6001V9.1543Z" fill="white" />
+                                    <path d="M5.6001 13.4199H9.86677V14.8399H5.6001V13.4199Z" fill="white" />
+                                </svg>
+                            </div>
+                            <div className='space-y-1'>
+                                <p className='font-semibold'>Year:<span className='text-gray-600 font-normal text-sm'> {edu.year}</span></p>
+                                <p className='font-semibold'>Degree:<span className='text-gray-600 font-normal text-sm'> {edu.degree}</span></p>
+                                <p className='font-semibold'>Institute:<span className='text-gray-600 font-normal text-sm'> {edu.institute}</span></p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className='bg-white rounded-lg p-4'>
+                <p className='text-lg font-medium mb-4'>Experience</p>
+                <div className='grid grid-cols-3 space-x-4'>
+                    {teacher.experience && Array.isArray(teacher.experience) && teacher.experience.map((exp: Experience, index: number) => (
+                        <div key={index} className="bg-gray-50 rounded-lg p-4">
+                            <div className='w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center mb-3'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21.7906 1.5H11.2469C10.0287 1.5 9.03754 2.49115 9.03754 3.70935V10.4731L7.07977 9.49951C7.01367 9.46655 6.94647 9.43542 6.87872 9.40594C7.45349 8.80591 7.8078 7.99292 7.8078 7.09845C7.8078 5.25732 6.31 3.75934 4.46887 3.75934C2.62756 3.75934 1.12976 5.25732 1.12976 7.09845C1.12976 8.09894 1.57269 8.99762 2.27216 9.61011C0.984009 10.3348 0 11.7486 0 13.5V15.7593C0 16.732 0.631531 17.5598 1.50623 17.8541V21.7844C1.50623 22.1726 1.82098 22.4875 2.20935 22.4875H6.72803C7.11639 22.4875 7.43115 22.1726 7.43115 21.7844V13.8843L9.68225 15.0097C10.5438 15.4404 11.7123 15.1837 12.2408 14.2031H14.7618L12.0923 21.544C11.9595 21.9089 12.1479 22.3125 12.5129 22.4451C12.93 22.5969 13.301 22.3352 13.4139 22.0247L16.2581 14.2031H16.751L19.6243 22.0269C19.7335 22.3237 20.1017 22.6005 20.5269 22.4443C20.8912 22.3105 21.0784 21.9066 20.9443 21.542L18.249 14.2031H21.7906C22.9852 14.2031 24 13.2394 24 11.9938V3.70935C24 2.4635 22.9852 1.5 21.7906 1.5ZM2.53601 7.09845C2.53601 6.03259 3.40302 5.16559 4.46869 5.16559C5.53455 5.16559 6.40155 6.03259 6.40155 7.09845C6.40155 8.16412 5.53455 9.03113 4.46869 9.03113C3.40302 9.03113 2.53601 8.16412 2.53601 7.09845ZM11.0391 13.4513C11.0372 13.4564 11.0354 13.4617 11.0338 13.467C10.9858 13.6009 10.8774 13.7137 10.7446 13.7682C10.6042 13.8254 10.4462 13.8193 10.3112 13.752C8.97418 13.0831 7.04224 12.1179 7.04224 12.1179C6.57568 11.8846 6.0249 12.2245 6.0249 12.7469V21.0813H2.91248V17.2656C2.91248 16.8774 2.59753 16.5624 2.20935 16.5624C1.76642 16.5624 1.40625 16.2023 1.40625 15.7593V13.5C1.40625 11.7819 2.80518 10.4376 4.46869 10.4376H5.08997C5.56128 10.4376 6.03204 10.5482 6.45264 10.7582C6.45264 10.7582 9.94025 12.4926 10.8285 12.9349C11.0187 13.0294 11.1092 13.2513 11.0391 13.4513ZM22.5938 11.9938C22.5938 12.2086 22.5104 12.4102 22.3588 12.5618C22.2096 12.7112 22.0025 12.7969 21.7906 12.7969H12.3937C12.3924 12.793 12.3915 12.7892 12.3902 12.7855L14.1352 9.29572C14.3088 8.94836 14.1682 8.52612 13.8208 8.35236C13.4736 8.17877 13.0512 8.3194 12.8774 8.66675L11.3892 11.6431C11.1118 11.5049 10.7893 11.3443 10.4438 11.1725V3.70935C10.4438 3.2666 10.804 2.90625 11.2469 2.90625H21.7906C22.0025 2.90625 22.2096 2.99194 22.359 3.14172C22.5104 3.29297 22.5938 3.49457 22.5938 3.70935V11.9938Z" fill="white" />
+                                    <path d="M20.2842 4.51172H12.7529C12.3646 4.51172 12.0498 4.82648 12.0498 5.21484C12.0498 5.60321 12.3646 5.91797 12.7529 5.91797H20.2842C20.6724 5.91797 20.9874 5.60321 20.9874 5.21484C20.9874 4.82648 20.6726 4.51172 20.2842 4.51172Z" fill="white" />
+                                    <path d="M20.2843 7.14844H16.5186C16.1304 7.14844 15.8154 7.4632 15.8154 7.85156C15.8154 8.23993 16.1304 8.55469 16.5186 8.55469H20.2843C20.6725 8.55469 20.9874 8.23993 20.9874 7.85156C20.9874 7.4632 20.6727 7.14844 20.2843 7.14844Z" fill="white" />
+                                    <path d="M20.2843 9.7832H16.5186C16.1304 9.7832 15.8154 10.098 15.8154 10.4863C15.8154 10.8745 16.1304 11.1895 16.5186 11.1895H20.2843C20.6725 11.1895 20.9874 10.8745 20.9874 10.4863C20.9874 10.098 20.6727 9.7832 20.2843 9.7832Z" fill="white" />
+                                </svg>
+                            </div>
+                            <div className='space-y-1'>
+                                <p className='font-semibold'>Year:<span className='text-gray-600 font-normal text-sm'> {exp.year}</span></p>
+                                <p className='font-semibold'>Position:<span className='text-gray-600 font-normal text-sm'> {exp.position}</span></p>
+                                <p className='font-semibold'>Company:<span className='text-gray-600 font-normal text-sm'> {exp.company}</span></p>
+                                <p className='font-semibold'>Description:<span className='text-gray-600 font-normal text-sm'> {exp.description}</span></p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

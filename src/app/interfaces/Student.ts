@@ -3,6 +3,8 @@ export default interface Student {
     name: string;
     email: string;
     password: string;
+    courses: string[];
+    class: string;
     selectedCourses: string[];
     bio?: string;
     profilePic?: string;
@@ -12,4 +14,9 @@ export default interface Student {
     upcomingClasses: number;
     completedTasks: number;
     pendingTasks: number;
+    results: [{
+        subject: string,
+        marks: number,
+        semester: number
+    }]
 }

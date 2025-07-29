@@ -10,7 +10,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) => {
 
   const pathname = usePathname()
-  const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
   return (
     <div className={`fixed h-screen z-50 w-64 overflow-hidden transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -113,22 +112,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
               <p className="ml-2">Timetable</p>
             </div>
           </Link>
-          {!isProduction && (
-            <Link href={'/students'} onClick={isLgScreen ? undefined : toggleSidebar}>
-              <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/students' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
-                <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none">
-                  <path d="M43.31,37.52A11.83,11.83,0,0,1,31.25,49.35,12.1,12.1,0,0,1,19.63,37.12V20.64a.1.1,0,0,1,.08-.1,90.43,90.43,0,0,1,12.08-1,82.5,82.5,0,0,1,11.57,1,.09.09,0,0,1,.07.1Z" />
-                  <path d="M19.63,26,9,20.47a.1.1,0,0,1,0-.18L31.49,8.86h.09L54,20.17a.1.1,0,0,1,0,.18L43.43,26" />
-                  <path d="M19.63,32.19H17.7s-2.94,0-2.94,4.52c0,4.17,2.93,4.17,2.93,4.17l2.51-.05" />
-                  <path d="M43.3,32.7h1.93s3,0,3,4.53c0,4.17-2.94,4.17-2.94,4.17H42.65" />
-                  <line x1="52.72" y1="45.04" x2="52.72" y2="21.03" /><circle cx="52.72" cy="47.36" r="2.31" />
-                  <polyline points="37.76 47.53 37.76 55.15 25.89 55.15 25.89 47.95" />
-                  <path d="M43.43,30.13a63,63,0,0,0-11.61-1,60.25,60.25,0,0,0-12.19,1" />
-                </svg>
-                <p className="ml-2">Students</p>
-              </div>
-            </Link>
-          )}
         </div>
       </div>
     </div>

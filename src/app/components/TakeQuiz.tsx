@@ -2,7 +2,7 @@ import React from 'react';
 
 const TakeQuiz = () => {
     return (
-        <div className='bg-gray-100 rounded-lg flex items-center p-6'>
+        <div className='bg-gray-100 rounded-lg flex items-center pt-5 pb-4 px-6'>
             <div className='w-full'>
                 <div className='flex'>
                     <div>

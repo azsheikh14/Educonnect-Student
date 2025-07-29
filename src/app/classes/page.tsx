@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useUserContext } from '../contexts/userContext';
-import Class from '../interfaces/Class';
 import { toast } from 'react-toastify';
 import { useChatContext } from '../contexts/chatContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Select from 'react-select';
+import { useClassContext } from '../contexts/studentClassContext';
 
 const Classes = () => {
-    const [classes, setClasses] = useState<Class[]>([]);
+    const { classes, setClasses } = useClassContext();
     const [filter, setFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     // const [sortOption, setSortOption] = useState('date');
@@ -37,15 +37,18 @@ const Classes = () => {
 
     const handleConfirmClass = async (classId: string) => {
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/class/confirmClassByTeacher/${classId}`, { teacherId: userData?._id });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/class/confirm-class/${classId}`, { teacherId: userData?._id });
+            console.log('response :', response);
+            // if(response.status !== 200) {
+            //     toast.error(response?.message || 'Failed to confirm class.');
+            // }
             toast.success('Class confirmed successfully!');
             const updatedClasses = classes.map(cls =>
                 cls._id === classId ? { ...cls, isConfirmed: true, jitsiLink: response.data.jitsiLink } : cls
             );
             setClasses(updatedClasses);
-        } catch (error) {
-            console.error('Error confirming class:', error);
-            toast.error('Failed to confirm class.');
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || 'Failed to confirm class.');
         }
     };
 
@@ -350,7 +353,7 @@ const Classes = () => {
                         <div className="flex justify-between items-center text-center w-full text-base font-bold">
                             <div className="w-full">
                                 {!cls.isConfirmed ? (
-                                    !cls.isConfirmedByStudent ? (
+                                    cls.isConfirmedByStudent ? (
                                         <button className="bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring focus:ring-red-300 w-full">
                                             Waiting for Confirmation
                                         </button>

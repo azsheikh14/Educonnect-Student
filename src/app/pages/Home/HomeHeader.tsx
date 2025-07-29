@@ -25,6 +25,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
     const router = useRouter();
     const pathname = usePathname();
     const { notifications, removeNotification, setNotifications } = useNotification();
+    console.log('mynotifications :', notifications);
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults] = useState<SearchResults>({ students: [], classes: [] });
@@ -226,9 +227,9 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
                 <div className="ml-4 inline-block cursor-pointer" ref={dropdownRef}>
                     <div className="relative flex items-center" onClick={handleBellClick}>
                         <GoBell className="m-2 cursor-pointer text-xl" />
-                        <div className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center -ml-4 -mt-4">{notifications.length}</div>
+                        <div className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center -ml-4 -mt-4">{notifications.notifications.length || 0}</div>
                     </div>
-                    {showDropdown && <NotificationDropdown notifications={notifications} removeNotification={removeNotification} closeNotifications={toggleDropdown} />}
+                    {showDropdown && <NotificationDropdown notifications={notifications.notifications} removeNotification={removeNotification} closeNotifications={toggleDropdown} />}
                 </div>
                 <IoPowerOutline className='cursor-pointer text-2xl ml-3' onClick={handleLogout} />
             </div>

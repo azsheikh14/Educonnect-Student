@@ -15,18 +15,17 @@ interface NotificationComponentProps {
 
 const NotificationComponent: React.FC<NotificationComponentProps> = ({ notifications, removeNotification, closeNotifications }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [visibleNotifications, setVisibleNotifications] = useState<DropdownNotification[]>(notifications);
+  const [visibleNotifications, setVisibleNotifications] = useState<{ notifications: DropdownNotification[]; totalNotifications: number; totalPages: number; currentPage: number }>({ notifications, totalNotifications: 0, totalPages: 0, currentPage: 1 });
   console.log('visibleNotifications :', visibleNotifications);
 
   const handleRemoveNotification = (index: number) => {
-    const newNotifications = [...visibleNotifications];
+    const newNotifications = [...visibleNotifications.notifications];
     newNotifications[index] = { ...newNotifications[index], removing: true };
-
-    setVisibleNotifications(newNotifications);
-
+    setVisibleNotifications(prev => ({ ...prev, notifications: newNotifications }));
+  
     setTimeout(() => {
       newNotifications.splice(index, 1);
-      setVisibleNotifications(newNotifications);
+      setVisibleNotifications(prev => ({ ...prev, notifications: newNotifications }));
       removeNotification(index);
     }, 300);
   };
@@ -36,12 +35,12 @@ const NotificationComponent: React.FC<NotificationComponentProps> = ({ notificat
       <div className="relative">
         <div className="absolute -top-2 right-4 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"></div>
       </div>
-      <div className={`max-h-80 scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded overflow-y-auto ${visibleNotifications.length === 0 ? '' : 'h-auto'}`}>
-        {visibleNotifications.length === 0 ? (
+      <div className={`max-h-80 scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded overflow-y-auto ${visibleNotifications.notifications.length === 0 ? '' : 'h-auto'}`}>
+        {visibleNotifications.notifications.length === 0 ? (
           <div className="p-4 text-gray-500">No notifications</div>
         ) : (
-          visibleNotifications.slice().reverse().map((notification, index) => {
-            const originalIndex = visibleNotifications.length - 1 - index;
+          visibleNotifications.notifications.slice().reverse().map((notification, index) => {
+            const originalIndex = visibleNotifications.notifications.length - 1 - index;
 
             return (
               <div key={originalIndex} className={`p-4 border-b border-gray-200 flex items-center transition-transform duration-300 ${notification.removing ? 'transform -translate-x-full opacity-0' : 'opacity-100'}`}>

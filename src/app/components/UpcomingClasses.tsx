@@ -4,11 +4,13 @@ import { FaChevronRight, FaChevronLeft, FaAngleDoubleRight, FaAngleDoubleLeft } 
 import axios from 'axios';
 import { useUserContext } from '../contexts/userContext';
 import Class from '../interfaces/Class';
+import { useRouter } from 'next/navigation';
 
 const UpcomingClasses = () => {
     const { userData } = useUserContext();
     const [upcomingClasses, setUpcomingClasses] = useState<Class[]>([]);
     const [currentDate, setCurrentDate] = useState(new Date());
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUpcomingClasses = async () => {
@@ -74,7 +76,7 @@ const UpcomingClasses = () => {
             <div className="datepicker bg-white border-gray-200 border rounded-lg p-6 h-full w-full">
                 <div className="datepicker-top mb-4">
                     <div className="btn-group flex justify-center mb-4 -mt-2 text-center">
-                        <h2 className="text-2xl font-bold text-gray-900">Upcoming Classes</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 cursor-pointer" onClick={() => router.push('/timetable')}>Upcoming Classes</h2>
                     </div>
                     <div className="month-selector flex justify-between items-center">
                         <div className="flex items-center">

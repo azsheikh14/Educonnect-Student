@@ -31,6 +31,15 @@ export const getTeachersByPagination = async (page: number, search: string) => {
     }
 }
 
+export const getTeachersByPageLimit = async (page: number, limit: number) => {
+    try {
+        const response = await axios.post(`${apiUrl}/teacher/getAllTeachers`, { page, limit });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching student data:', error);
+    }
+}
+
 export const getStudentsForTeacher = async (studentIds: string[]) => {
     try {
         const response = await axios.post(`${apiUrl}/student/getStudentsForTeacher`, { studentIds });

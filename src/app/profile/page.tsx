@@ -1,16 +1,145 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../contexts/userContext';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Image from 'next/image';
 import Student from '../interfaces/Student'
+import Select, { MultiValue } from 'react-select';
+import { customSelectStyles } from '@/styles/SelectDropdownStyles';
+
+const courses = [
+    'Math',
+    'Computer Science',
+    'History',
+    'English',
+    'Chemistry',
+    'Physics',
+    'Biology',
+];
+
+const classes = [
+    'O-Level 1',
+    'O-Level 2',
+    'O-Level 3',
+    'Matric P-1',
+    'Matric P-2',
+    'Intermediate P-1',
+    'Intermediate P-2'
+];
 
 const ProfileComponent = () => {
     const { userData, setUserData } = useUserContext();
-    const [editProfile, setEditProfile] = useState<Student>({ ...userData! });
-    const [loading, setLoading] = useState(false);
-    console.log('loading :', loading);
+    const [selectedCourse, setSelectedCourses] = useState<string[]>(userData?.courses || []);
+    const [selectedClass, setSelectedClass] = useState<string>(userData?.class || '');
+    const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
+
+    const [editProfile, setEditProfile] = useState<Student>({
+        _id: '',
+        name: '',
+        email: '',
+        password: '',
+        courses: [],
+        class: '',
+        selectedCourses: [],
+        bio: '',
+        profilePic: '',
+        enrollmentNumber: '',
+        assignments: [],
+        classesAttended: 0,
+        upcomingClasses: 0,
+        completedTasks: 0,
+        pendingTasks: 0,
+        results: [{
+            subject: '',
+            marks: 0,
+            semester: 0
+        }]
+    });
+
+    const handleSort = (key: string) => {
+        setSortConfig(prev => ({
+            key,
+            direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+        }));
+    };
+
+    const sortedResults = [...editProfile.results].sort((a, b) => {
+        let valA: string | number;
+        let valB: string | number;
+
+        if (sortConfig.key === 'subject') {
+            valA = String(a.subject);
+            valB = String(b.subject);
+        } else if (sortConfig.key === 'marks') {
+            valA = Number(a.marks);
+            valB = Number(b.marks);
+        } else if (sortConfig.key === 'semester') {
+            valA = Number(a.semester);
+            valB = Number(b.semester);
+        } else {
+            valA = '';
+            valB = '';
+        }
+
+        if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    useEffect(() => {
+        console.log('editProfile :', editProfile);
+    }, [editProfile])
+
+    useEffect(() => {
+        console.log('userData :', userData);
+        if (userData) {
+            setEditProfile({
+                _id: userData._id || '',
+                name: userData.name || '',
+                email: userData.email || '',
+                password: userData.password || '',
+                courses: userData.courses || [],
+                class: userData.class || '',
+                selectedCourses: userData.selectedCourses || [],
+                bio: userData.bio || '',
+                profilePic: userData.profilePic || '',
+                enrollmentNumber: userData.enrollmentNumber || '',
+                assignments: userData.assignments || [],
+                classesAttended: userData.classesAttended || 0,
+                upcomingClasses: userData.upcomingClasses || 0,
+                completedTasks: userData.completedTasks || 0,
+                pendingTasks: userData.pendingTasks || 0,
+                results: userData.results || [{
+                    subject: '',
+                    marks: 0,
+                    semester: 0
+                }]
+            });
+            setSelectedCourses(userData.courses)
+            setSelectedClass(userData.class)
+        }
+        console.log('selectedCourses :', courses);
+    }, [userData]);
+
+    const handleCourseChange = (selectedOptions: MultiValue<{ value: string; label: string }>) => {
+        const newCourses = selectedOptions ? selectedOptions.map(option => option.value) : [];
+        setSelectedCourses(newCourses);
+        setEditProfile(prevState => ({
+            ...prevState,
+            courses: newCourses,
+        }));
+    };
+
+    // Handle class selection
+    const handleClassChange = (selectedOption: { value: string; label: string } | null) => {
+        const newClass = selectedOption ? selectedOption.value : '';
+        setSelectedClass(newClass);
+        setEditProfile(prevState => ({
+            ...prevState,
+            class: newClass,
+        }));
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -22,11 +151,10 @@ const ProfileComponent = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
 
         try {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const response = await axios.post(`${apiUrl}/teacher/updateTeacherProfile/${userData?._id}`, {
+            const response = await axios.post(`${apiUrl}/student/updateStudentProfile/${userData?._id}`, {
                 ...editProfile,
             });
             setUserData(response.data);
@@ -34,8 +162,6 @@ const ProfileComponent = () => {
         } catch (err) {
             console.error('Error saving profile:', err);
             toast.error('Failed to update profile');
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -91,6 +217,24 @@ const ProfileComponent = () => {
                             <input type="text" disabled name="enrollmentNumber" value={editProfile.enrollmentNumber} onChange={handleChange} className="w-full px-4 h-14 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none text-base font-medium" />
                         </div>
                     </div>
+                    <div className='grid grid-cols-2 space-x-4 mt-5'>
+                        <Select
+                            isMulti
+                            options={courses.map(course => ({ value: course, label: course }))}
+                            value={selectedCourse.map(course => ({ value: course, label: course }))}
+                            onChange={handleCourseChange}
+                            placeholder='Select Courses'
+                            styles={customSelectStyles} // Assuming you have customSelectStyles defined
+                        />
+
+                        <Select
+                            options={classes.map(classItem => ({ value: classItem, label: classItem }))}
+                            value={selectedClass ? { value: selectedClass, label: selectedClass } : null}
+                            onChange={handleClassChange}
+                            placeholder="Select Class"
+                            styles={customSelectStyles}
+                        />
+                    </div>
                     <div className='w-full mt-5'>
                         <p className='mb-2'>Bio</p>
                         <textarea
@@ -107,6 +251,33 @@ const ProfileComponent = () => {
                         />
                     </div>
                 </div>
+                <div className='w-full bg-white p-6 rounded-lg border border-gray-200'>
+                    <p className='text-xl font-bold mb-4'>Result</p>
+
+                    {editProfile?.results?.length > 0 ? (
+                        <table className='w-full text-left'>
+                            <thead>
+                                <tr>
+                                    <th className='py-2 cursor-pointer' onClick={() => handleSort('semester')}>Semester</th>
+                                    <th className='py-2 cursor-pointer' onClick={() => handleSort('subject')}>Subject</th>
+                                    <th className='py-2 cursor-pointer' onClick={() => handleSort('marks')}>Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sortedResults.map((r, idx) => (
+                                    <tr key={idx}>
+                                        <td className='py-2'>{r.semester.toString()}</td>
+                                        <td className='py-2'>{r.subject}</td>
+                                        <td className='py-2'>{r.marks.toString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p>No results found.</p>
+                    )}
+                </div>
+
 
                 <div className='flex justify-end w-full mt-4'>
                     <button type="submit" className='bg-blue-600 w-40 rounded-lg px-4 py-1 h-10 font-bold text-base cursor-pointer flex items-center justify-center text-white'>
@@ -115,6 +286,7 @@ const ProfileComponent = () => {
                 </div>
 
             </form>
+            <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );
 };

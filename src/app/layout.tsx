@@ -3,6 +3,10 @@ import ClientLayout from './studentLayout';
 import { UserProvider } from './contexts/userContext';
 import { ChatProvider } from './contexts/chatContext';
 import { NotificationProvider } from './contexts/notificationContext';
+import { ClassProvider } from '@/app/contexts/studentClassContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,11 +21,14 @@ export default function RootLayout({
   return (
     <UserProvider>
       <NotificationProvider>
-        <ChatProvider>
-          <ClientLayout>
-            {children}
-          </ClientLayout>
-        </ChatProvider>
+        <ClassProvider>
+          <ChatProvider>
+            <ClientLayout>
+              {children}
+              <ToastContainer position="bottom-right" autoClose={3000} />
+            </ClientLayout>
+          </ChatProvider>
+        </ClassProvider>
       </NotificationProvider>
     </UserProvider>
   )

@@ -1,6 +1,7 @@
 interface Teacher {
   _id: string;
   name: string;
+  isActive: boolean;
   isPremium: boolean;
   title: string;
   bio: string;

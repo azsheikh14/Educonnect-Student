@@ -2,13 +2,20 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import io from 'socket.io-client';
 import { useUserContext } from './userContext';
-import Notification from '@/app/interfaces/Notification'
+import Notification from '@/app/interfaces/Notification';
+
+interface NotificationData {
+  currentPage: string;
+  notifications: Notification[];
+  totalNotifications: string;
+  totalPages: string;
+}
 
 interface NotificationContextType {
-  notifications: Notification[];
-  addNotification: (notification: Notification) => void;
+  notifications: NotificationData;
+  addNotification: (notification: NotificationData) => void;
   removeNotification: (index: number) => void;
-  setNotifications: (newNotifications: Notification[]) => void;
+  setNotifications: (newNotifications: NotificationData) => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -29,24 +36,33 @@ const socketUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const socket = io(socketUrl);
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
-  const [notifications, setNotificationsState] = useState<Notification[]>([]);
+  // Initialize state with default values for a complete NotificationData object
+  const [notifications, setNotificationsState] = useState<NotificationData>({
+    currentPage: "",
+    notifications: [],
+    totalNotifications: "0",
+    totalPages: "0"
+  });
 
   const { userData } = useUserContext();
   const userId = userData?._id;
 
   useEffect(() => {
     const storedNotifications = localStorage.getItem('notifications');
-    if (storedNotifications) setNotificationsState(JSON.parse(storedNotifications));
+    if (storedNotifications) {
+      const parsed = JSON.parse(storedNotifications);
+      setNotificationsState(parsed);
+    }
   }, []);
 
   useEffect(() => {
     if (!userId) return;
 
-    socket.on('teacherNotification', (notification: Notification) => {
+    socket.on('teacherNotification', (notification: NotificationData) => {
       addNotification(notification);
     });
 
-    socket.on(`teacher_${userId}`, (notification: Notification) => {
+    socket.on(`teacher_${userId}`, (notification: NotificationData) => {
       addNotification(notification);
     });
 
@@ -56,37 +72,59 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     };
   }, [userId]);
 
+  // Persist the notifications state to local storage when it changes.
   useEffect(() => {
     localStorage.setItem('notifications', JSON.stringify(notifications));
   }, [notifications]);
 
-  const addNotification = (notification: Notification) => {
-  console.log('notification :', notification);
-    setNotificationsState((prevNotifications) => [...prevNotifications, notification]);
+  const addNotification = (notification: NotificationData) => {
+    setNotificationsState((prevNotifications) => ({
+      ...prevNotifications,
+      notifications: [
+        ...(prevNotifications?.notifications || []),
+        ...(notification?.notifications || [])
+      ],
+      totalNotifications: (
+        parseInt(prevNotifications.totalNotifications) + parseInt(notification.totalNotifications)
+      ).toString(),
+      totalPages: notification.totalPages,
+      currentPage: notification.currentPage || prevNotifications.currentPage,
+    }));
   };
 
   const removeNotification = (index: number) => {
     setNotificationsState((prevNotifications) => {
-      const updatedNotifications = prevNotifications.filter((_, i) => i !== index);
-      localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+      const updatedNotifications = prevNotifications.notifications.filter((_, i) => i !== index);
+      const updatedNotificationData = {
+        ...prevNotifications,
+        notifications: updatedNotifications,
+        totalNotifications: (
+          parseInt(prevNotifications.totalNotifications) - 1
+        ).toString(),
+      };
 
-      const removedNotification = prevNotifications[index];
+      // Write the update into local storage
+      localStorage.setItem('notifications', JSON.stringify(updatedNotificationData));
+
+      // Emit removal event via socket if applicable
+      const removedNotification = prevNotifications.notifications[index];
       if (removedNotification) {
         socket.emit('removeNotification', { _id: removedNotification._id });
       }
 
-      return updatedNotifications;
+      return updatedNotificationData;
     });
   };
 
-  const setNotifications = (newNotifications: Notification[]) => {
-  console.log('newNotifications :', newNotifications);
+  const setNotifications = (newNotifications: NotificationData) => {
     setNotificationsState(newNotifications);
     localStorage.setItem('notifications', JSON.stringify(newNotifications));
   };
 
   return (
-    <NotificationContext.Provider value={{ notifications, addNotification, removeNotification, setNotifications }}>
+    <NotificationContext.Provider
+      value={{ notifications, addNotification, removeNotification, setNotifications }}
+    >
       {children}
     </NotificationContext.Provider>
   );

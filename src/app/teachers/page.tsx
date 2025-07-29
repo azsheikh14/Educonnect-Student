@@ -1,49 +1,87 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import TeacherCard from '../components/TeacherCard'; // Assuming you have a TeacherCard component
+import React, { useEffect, useState, useRef } from 'react';
+import TeacherCard from '../components/TeacherCard';
 import Teacher from '../interfaces/profile';
 import Select from 'react-select';
+import { getTeachersByPageLimit } from '../services/teacherService';
 
-// Define the type for the select options
 interface OptionType {
     value: string;
     label: string;
 }
 
 const Teachers = () => {
-    const [teachers, setTeachers] = useState<Teacher[]>([]); // Initial state is an empty array
+    const [teachers, setTeachers] = useState<Teacher[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [subjectFilter, setSubjectFilter] = useState<OptionType | null>(null);
     const [classFilter, setClassFilter] = useState<OptionType | null>(null);
     const [sortOption, setSortOption] = useState('name');
+    const [page, setPage] = useState(1);
+    const [totalTeachers, setTotalTeachers] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const pageRef = useRef(page);
+    const [hasMore, setHasMore] = useState(true);
+    const initialFetch = useRef(true);
+
+    const fetchTeachers = async (page: number, limit: number) => {
+        if (loading || !hasMore) return;
+        setLoading(true);
+        try {
+            const response = await getTeachersByPageLimit(page, limit);
+            setTeachers((prevTeachers) => [...prevTeachers, ...response.teachers]);
+            setTotalTeachers(response.totalTeachers);
+        } catch (error) {
+            console.error('Error fetching teachers:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchTeachers = async () => {
-            try {
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                const response = await axios.post(`${apiUrl}/teacher/getAllTeachers`);
-                console.log(response.data); // Log the response to inspect the structure
-                setTeachers(response.data.teachers); // Ensure this is an array
-            } catch (error) {
-                console.error('Error fetching teachers:', error);
-            }
-        };
+        setHasMore(teachers.length < totalTeachers);
+        console.log('teachers :', teachers);
+    }, [teachers, totalTeachers]);
 
-        fetchTeachers();
+    const handleScroll = () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const threshold = 2;
+
+        if (windowHeight + scrollTop >= documentHeight - threshold) {
+            if (hasMore && !loading) {
+                pageRef.current = pageRef.current + 1
+                setPage((teachers.length / 12) + 1);
+            }
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [hasMore, loading]);
+
+    useEffect(() => {
+        if (initialFetch.current) {
+            initialFetch.current = false;
+            fetchTeachers(page, 12);
+        }
     }, []);
+
+    useEffect(() => {
+        if (page > 1) {
+            fetchTeachers(page, 12);
+        }
+    }, [page]);
 
     const handleClearFilters = () => {
         setSubjectFilter(null);
         setClassFilter(null);
-        setSortOption('name'); // Reset sort option to default
-        setSearchTerm(''); // Clear search term
+        setSortOption('name');
+        setSearchTerm('');
     };
-
-    const sortOptions = [
-        { value: 'name', label: 'Sort by Name' },
-        { value: 'experience', label: 'Sort by Experience' },
-    ];
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -56,9 +94,7 @@ const Teachers = () => {
             (!classFilter || teacher.classes?.includes(classFilter.value))
         )
         .sort((a, b) => {
-            if (sortOption === 'name') {
-                return a.name.localeCompare(b.name);
-            } else if (sortOption === 'experience') {
+            if (sortOption === 'experience') {
                 return b.experienceYears - a.experienceYears;
             } else {
                 return 0;
@@ -98,7 +134,7 @@ const Teachers = () => {
                         onChange={handleSearchChange}
                     />
                 </div>
-                <div className='space-x-3 ml-3 flex w-2/3'>
+                <div className='space-x-3 ml-3 flex'>
                     <Select
                         options={subjectOptions}
                         value={subjectFilter}
@@ -217,69 +253,7 @@ const Teachers = () => {
                             }),
                         }}
                     />
-                    <Select
-                        options={sortOptions}
-                        value={sortOptions.find(option => option.value === sortOption)}
-                        onChange={(option) => setSortOption(option?.value || 'name')}
-                        placeholder="Sort"
-                        className="w-60"
-                        styles={{
-                            control: (provided) => ({
-                                ...provided,
-                                padding: '0',
-                                height: '45px',
-                                backgroundColor: '#F9FAFB',
-                                border: '1px solid #E5E7EB',
-                                borderRadius: '0.75rem',
-                                boxShadow: 'none',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                '&:hover': {
-                                    borderColor: '#E5E7EB',
-                                },
-                            }),
-                            valueContainer: (provided) => ({
-                                ...provided,
-                                padding: '0 1rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                            }),
-                            input: (provided) => ({
-                                ...provided,
-                                margin: '0',
-                            }),
-                            placeholder: (provided) => ({
-                                ...provided,
-                                margin: '0',
-                                lineHeight: '45px',
-                            }),
-                            dropdownIndicator: (provided) => ({
-                                ...provided,
-                                padding: '0',
-                                paddingRight: '10px',
-                                paddingLeft: '10px',
-                            }),
-                            indicatorsContainer: (provided) => ({
-                                ...provided,
-                                padding: '0',
-                            }),
-                            menu: (provided) => ({
-                                ...provided,
-                                zIndex: 100,
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                cursor: 'pointer',
-                                backgroundColor: provided.backgroundColor,
-                                color: state.isFocused ? '#000' : provided.color,
-                            }),
-                        }}
-                    />
-                    <button
-                        onClick={handleClearFilters}
-                        className="bg-blue-400 rounded-lg px-4 text-white focus:outline-none"
-                    >
+                    <button onClick={handleClearFilters} className="bg-blue-400 rounded-lg px-4 text-white focus:outline-none" >
                         Clear
                     </button>
                 </div>

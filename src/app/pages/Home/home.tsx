@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
 import AssignedWork from '@/app/components/AssignedWork';
 import FeaturedTeachers from '@/app/components/FeaturedTeachers';
 import MyProfile from '@/app/components/MyProfile';
@@ -9,6 +8,7 @@ import TeacherCard from '@/app/components/TeacherCard';
 import UpcomingClasses from '@/app/components/UpcomingClasses';
 import { useUserContext } from '@/app/contexts/userContext';
 import Teacher from '@/app/interfaces/profile';
+import { getTeachersByPageLimit } from '@/app/services/teacherService';
 
 const Home = () => {
     const { userData } = useUserContext();
@@ -25,10 +25,9 @@ const Home = () => {
         if (loading || !hasMore) return;
         setLoading(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            const response = await axios.post(`${apiUrl}/teacher/getAllTeachers`, { page, limit });
-            setTeachers((prevTeachers) => [...prevTeachers, ...response.data.teachers]);
-            setTotalTeachers(response.data.totalTeachers);
+            const response = await getTeachersByPageLimit(page, limit)
+            setTeachers((prevTeachers) => [...prevTeachers, ...response.teachers]);
+            setTotalTeachers(response.totalTeachers);
         } catch (error) {
             console.error('Error fetching teachers:', error);
         } finally {
@@ -38,6 +37,7 @@ const Home = () => {
 
     useEffect(() => {
         setHasMore(teachers.length < totalTeachers);
+        console.log('teachers :', teachers);
     }, [teachers, totalTeachers]);
 
     const handleScroll = () => {
@@ -48,8 +48,8 @@ const Home = () => {
 
         if (windowHeight + scrollTop >= documentHeight - threshold) {
             if (hasMore && !loading) {
-                pageRef.current = pageRef.current + 1; // Increment the page number here
-                setPage((teachers.length / 12) + 1); // Set the page state
+                pageRef.current = pageRef.current + 1;
+                setPage((teachers.length / 12) + 1);
             }
         }
     };
