@@ -77,7 +77,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
         const storedPaths = JSON.parse(sessionStorage.getItem('previousPaths') || '[]');
         if (storedPaths[0] !== pathname) {
             storedPaths.unshift(pathname);
-            if (storedPaths.length > 4) {
+            if (storedPaths?.length > 4) {
                 storedPaths.pop();
             }
             sessionStorage.setItem('previousPaths', JSON.stringify(storedPaths));
@@ -86,7 +86,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
 
     const handleNavigation = () => {
         const storedPaths = JSON.parse(sessionStorage.getItem('previousPaths') || '[]');
-        if (storedPaths.length > 1) {
+        if (storedPaths?.length > 1) {
             const targetPath = storedPaths[1];
             storedPaths.shift();
             sessionStorage.setItem('previousPaths', JSON.stringify(storedPaths));
@@ -193,7 +193,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
                         <FaSearch />
                     </button>
                 </div>
-                {isSearchDropdownOpen && searchTerm && filteredOptions.length > 0 && (
+                {isSearchDropdownOpen && searchTerm && filteredOptions?.length > 0 && (
                     <ul className="absolute z-10 bg-white border border-gray-300 mt-1 rounded shadow-lg w-full">
                         {filteredOptions.map(option => (
                             <li key={option.name} className="">
@@ -201,7 +201,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
                                     <div className="font-semibold">{option.name}</div>
                                     <div className="text-gray-500 text-sm">{option.description}</div>
                                 </div>
-                                {option.filteredSections.length > 0 && (
+                                {option?.filteredSections?.length > 0 && (
                                     <ul className="mt-1">
                                         {option.filteredSections.map(section => (
                                             <li key={section.anchor} onClick={() => handleSearchOptionClick(option.path, section.anchor)} className="p-2 cursor-pointer hover:bg-gray-100 transition duration-200 text-base font-medium flex pl-6">
@@ -227,15 +227,15 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
                 <div className="ml-4 inline-block cursor-pointer" ref={dropdownRef}>
                     <div className="relative flex items-center" onClick={handleBellClick}>
                         <GoBell className="m-2 cursor-pointer text-xl" />
-                        <div className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center -ml-4 -mt-4">{notifications.notifications.length || 0}</div>
+                        <div className="bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center -ml-4 -mt-4">{notifications?.notifications?.length || 0}</div>
                     </div>
-                    {showDropdown && <NotificationDropdown notifications={notifications.notifications} removeNotification={removeNotification} closeNotifications={toggleDropdown} />}
+                    {showDropdown && <NotificationDropdown notifications={notifications?.notifications} removeNotification={removeNotification} closeNotifications={toggleDropdown} />}
                 </div>
                 <IoPowerOutline className='cursor-pointer text-2xl ml-3' onClick={handleLogout} />
             </div>
             {showSearchResults && (
                 <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50">
-                    {searchResults.students.length === 0 && searchResults.classes.length === 0 ? (
+                    {searchResults?.students?.length === 0 && searchResults?.classes?.length === 0 ? (
                         <div className="p-4 text-gray-500">No results found</div>
                     ) : (
                         <>
