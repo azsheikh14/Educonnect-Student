@@ -3,6 +3,7 @@ import { useUserContext } from '@/app/contexts/userContext';
 
 const Lectures = () => {
   const { userData } = useUserContext();
+  console.log('userData :', userData);
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <div className="flex justify-between items-center">

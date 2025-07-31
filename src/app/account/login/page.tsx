@@ -12,6 +12,7 @@ import { MdOutlinePerson2 } from "react-icons/md";
 import { MdOutlineSchool } from "react-icons/md";
 import Image from 'next/image'
 import { useUserContext } from '@/app/contexts/userContext';
+import { toast } from 'react-toastify';
 
 interface ErrorResponse {
     message?: string;
@@ -44,6 +45,7 @@ const Login = () => {
             Cookies.set('studentToken', token, { expires: 1 });
             router.push('/');
         } catch (error) {
+            toast.error('Invalid Credentials');
             const axiosError = error as AxiosError<ErrorResponse>;
         } finally {
             setLoading(false);
@@ -90,7 +92,7 @@ const Login = () => {
                             )}
                         </div>
                     </div>
-                    <div className="text-sm text-gray-500">Password must be at least 8 characters</div>
+                    <div className="text-sm text-gray-500">Dont have an account? <span className='text-blue-600 cursor-pointer' onClick={() => { window.location.href = '/account/signup' }}>Signup</span></div>
                     <div className="flex items-center space-x-2">
                         <input type="checkbox" className="h-4 w-4 cursor-pointer" />
                         <label>I'm not a robot</label>
