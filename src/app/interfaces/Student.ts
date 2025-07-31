@@ -3,6 +3,7 @@ export default interface Student {
     name: string;
     email: string;
     password: string;
+    classes: [];
     courses: string[];
     class: string;
     selectedCourses: string[];
