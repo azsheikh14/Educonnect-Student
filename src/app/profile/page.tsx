@@ -44,6 +44,7 @@ const ProfileComponent = () => {
         selectedCourses: [],
         bio: '',
         profilePic: '',
+        classes: [],
         enrollmentNumber: '',
         assignments: [],
         classesAttended: 0,
@@ -108,6 +109,7 @@ const ProfileComponent = () => {
                 assignments: userData.assignments || [],
                 classesAttended: userData.classesAttended || 0,
                 upcomingClasses: userData.upcomingClasses || 0,
+                classes: userData.classes || [],
                 completedTasks: userData.completedTasks || 0,
                 pendingTasks: userData.pendingTasks || 0,
                 results: userData.results || [{
