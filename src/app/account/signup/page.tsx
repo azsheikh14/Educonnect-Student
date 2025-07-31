@@ -82,7 +82,7 @@ const Signup: React.FC = () => {
                 </svg>
                 <span>Loading</span>
               </div>
-            ) : 'Log In'}
+            ) : 'Sign Up'}
           </button>
         </form>
       </div>
