@@ -5,6 +5,8 @@ import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { TbMail } from 'react-icons/tb';
 import { FiLock } from 'react-icons/fi';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { toast } from 'react-toastify';
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,8 @@ const Signup: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isNotRobot, setIsNotRobot] = useState(false);
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '';
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +28,7 @@ const Signup: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!isNotRobot) { toast.error('Please verify that you are not a robot.'); return }
     setLoading(true);
 
     try {
@@ -32,14 +37,8 @@ const Signup: React.FC = () => {
 
       setMessage(response.data.message);
       setTimeout(() => router.push('/account/login'), 2000); // Redirect to login page
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      console.error('Error during signup:', axiosError);
-      if (axiosError.response?.status === 409) { // Assuming 409 Conflict for existing account
-        setError('Account already exists. Please log in.');
-      } else {
-        setError('Signup failed. Please try again.');
-      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -49,7 +48,7 @@ const Signup: React.FC = () => {
     <div className="flex h-screen">
       <div className="w-1/2 flex flex-col justify-center items-left px-12">
         <h2 className="text-3xl font-bold mb-2">Hi!</h2>
-        <h3 className="text-xl font-semibold mb-6 text-[#76309B]">EduConnect Teachers</h3>
+        <h3 className="text-xl font-semibold mb-6 text-[#76309B]">EduConnect Students</h3>
         <form className="w-full max-w-md space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-bold text-gray-700">Name</label>
@@ -71,8 +70,7 @@ const Signup: React.FC = () => {
           </div>
           <div className="text-sm text-gray-500">Already have an account? <span className='text-blue-600 cursor-pointer' onClick={() => { window.location.href = '/account/login' }}>Login</span></div>
           <div className="flex items-center space-x-2">
-            <input type="checkbox" className="h-4 w-4 cursor-pointer" />
-            <label>I'm not a robot</label>
+            <ReCAPTCHA sitekey={siteKey} onChange={() => { setIsNotRobot(true) }} />
           </div>
           <button type="submit" style={{ backgroundColor: "#76309B" }} className="w-full cursor-pointer text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
             {loading ? (

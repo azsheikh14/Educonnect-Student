@@ -25,7 +25,9 @@ const classes = [
     'Matric P-1',
     'Matric P-2',
     'Intermediate P-1',
-    'Intermediate P-2'
+    'Intermediate P-2',
+    'Bachelors',
+    'Masters'
 ];
 
 const ProfileComponent = () => {
@@ -177,7 +179,7 @@ const ProfileComponent = () => {
                     <div className="flex flex-col items-center col-span-1 pb-8 pt-4">
                         <div className="relative  overflow-hidden cursor-pointer ">
                             {editProfile.profilePic ?
-                                <Image width={160} height={160} className="rounded-full object-cover bg-yellow-500" src={editProfile?.profilePic} alt="Profile" onClick={() => document.getElementById('fileInput')?.click()} />
+                                <Image width={160} height={160} className="w-[160px] h-[160px] rounded-full aspect-square object-cover cursor-pointer bg-yellow-500" src={editProfile?.profilePic} alt="Profile" onClick={() => document.getElementById('fileInput')?.click()} />
                                 :
                                 <Image width={160} height={160} className="rounded-full object-cover bg-yellow-500" src='/svg/noPic.svg' alt="Profile" onClick={() => document.getElementById('fileInput')?.click()} />
                             }
@@ -189,19 +191,31 @@ const ProfileComponent = () => {
                                 </svg>
                             </div>
                         </div>
-                        <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={(e) => {
-                            if (e.target.files && e.target.files[0]) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                    if (ev.target && ev.target.result) {
-                                        setEditProfile({
-                                            ...editProfile,
-                                            profilePic: ev.target.result as string,
-                                        });
-                                    }
-                                };
-                                reader.readAsDataURL(e.target.files[0]);
-                            }
+                        <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+
+                            const img = document.createElement('img') as HTMLImageElement;
+                            img.src = URL.createObjectURL(file);
+
+                            img.onload = async () => {
+                                const canvas = document.createElement('canvas');
+                                const MAX_WIDTH = 500;
+                                const scaleSize = MAX_WIDTH / img.width;
+                                canvas.width = MAX_WIDTH;
+                                canvas.height = img.height * scaleSize;
+
+                                const ctx = canvas.getContext('2d');
+                                ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                // Convert to compressed JPEG (you can tweak quality: 0.6–0.8 is good balance)
+                                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+
+                                setEditProfile(prev => ({
+                                    ...prev,
+                                    profilePic: compressedDataUrl
+                                }));
+                            };
                         }}
                         />
                     </div>

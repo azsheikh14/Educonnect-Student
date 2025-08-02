@@ -221,7 +221,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
             </div>
             <div className='flex items-center mr-5'>
                 <div className='flex items-center'>
-                    <div className='w-8 h-8 bg-yellow-400 rounded-full mr-2'></div>
+                    <img src={userData?.profilePic} className='w-8 h-8 bg-yellow-400 rounded-full mr-2' alt="" />
                     <p className='font-bold'>{userData?.name}</p>
                 </div>
                 <div className="ml-4 inline-block cursor-pointer" ref={dropdownRef}>

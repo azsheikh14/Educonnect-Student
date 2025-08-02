@@ -67,7 +67,7 @@ const Login = () => {
             </div>
             <div className="w-1/2 flex flex-col justify-center items-left px-12">
                 <h2 className="text-3xl font-bold mb-2">Hi!</h2>
-                <h3 className="text-xl font-semibold mb-6 text-[#76309B]">EduConnect Teachers</h3>
+                <h3 className="text-xl font-semibold mb-6 text-[#76309B]">EduConnect Students</h3>
                 <form className="w-full max-w-md space-y-4" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-bold text-gray-700">Email</label>

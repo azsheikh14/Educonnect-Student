@@ -11,9 +11,10 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
         <div className="bg-white rounded-lg overflow-hidden p-6 w-full max-w-[350px] flex flex-col items-center border border-gray-200">
             <div className="flex flex-col w-full mb-4">
                 <div className='flex justify-start'>
-                    <Link href={`/teacher?id=${teacher._id}`} className='w-12 h-12 rounded-full mb-4'>
-                        <img src={teacher?.profilePic || '/svg/noPic.svg'} className="rounded-full" alt={`${teacher.name}'s profile`} />
+                    <Link href={`/teacher?id=${teacher._id}`} className="w-12 h-12 rounded-full mb-4 overflow-hidden">
+                        <img src={teacher?.profilePic || '/svg/noPic.svg'} alt={`${teacher.name}'s profile`} className="w-[20] h-[20] object-cover aspect-square rounded-full" />
                     </Link>
+
                     <div className="relative w-full text-center flex flex-col items-start justify-start ml-3">
                         <Link href={`/teacher?id=${teacher._id}`}>
                             <h2 className="text-lg font-bold text-gray-900 cursor-pointer">{teacher.name.toUpperCase()}</h2>
