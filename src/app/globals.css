@@ -76,6 +76,25 @@ body {
   /* Change thumb color on hover */
 }
 
+.global-background{
+  background-color: #76309B;
+}
+
+.global-background-light{
+  background-color: hwb(283 36% 9%);
+}
+
+.global-background-extralight{
+  background-color: hwb(283 13% 33%);
+}
+
+.global-background-text{
+  color: #76309B;
+}
+
+.global-background-light-text{
+  color: hwb(283 36% 9%);
+}
 
 @keyframes bounce {
 

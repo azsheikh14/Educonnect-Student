@@ -14,14 +14,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
   return (
     <div className={`fixed h-screen z-50 w-64 overflow-hidden transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex flex-col border-r border-gray-300 items-center h-full text-black bg-white w-64">
-        <div className='w-full py-4 border-b border-gray-300 h-14 px-6 cursor-pointer'>
+        <div className='w-full border-b border-gray-300 h-14 flex px-4 items-center cursor-pointer'>
           <Link href='/' onClick={isLgScreen ? undefined : toggleSidebar}>
             <div className='flex items-center justify-start'>
-              <div className='w-6 h-6 bg-blue-500 rounded-md'>
+              <img src="/EduConnect.png" className='h-8' alt="" />
+              {/* <div className='w-6 h-6 bg-blue-500 rounded-md'>
                 <p className="text-white text-center font-racing-sans-one text-[17.5px] font-bold leading-normal">S</p>
               </div>
               <p className="ml-2 text-[var(--Text-T---Black,_var(--Primary-P6---BASE,_#2563EB))] leading-[24px] font-mochiy-pop-p-one font-normal">Students</p>
-              <p className="text-[var(--Text-T---Black,#000)] leading-trim leading-[24px] font-manrope font-extrabold ml-1">Portal</p>
+              <p className="text-[var(--Text-T---Black,#000)] leading-trim leading-[24px] font-manrope font-extrabold ml-1">Portal</p> */}
             </div>
           </Link>
           <div className='absolute top-2 right-2 cursor-pointer block lg:hidden' onClick={isLgScreen ? undefined : toggleSidebar}>
@@ -33,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
         </div>
         <div className='mt-6 px-6 w-full space-y-2'>
           <Link href={'/'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg className='' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 21 21" fill="none">
                 <path d="M13 2.75C13.4142 2.75 13.75 2.41421 13.75 2C13.75 1.58579 13.4142 1.25 13 1.25H9.9548C8.1182 1.24999 6.67861 1.24999 5.53648 1.37373C4.37094 1.50001 3.42656 1.76232 2.62024 2.34815C2.13209 2.70281 1.70281 3.13209 1.34815 3.62023C0.76232 4.42656 0.50001 5.37094 0.37373 6.53648C0.24999 7.67861 0.24999 9.1182 0.25 10.9548V11.0452C0.24999 12.8818 0.24999 14.3214 0.37373 15.4635C0.50001 16.6291 0.76232 17.5734 1.34815 18.3798C1.70281 18.8679 2.13209 19.2972 2.62023 19.6518C3.42656 20.2377 4.37094 20.5 5.53648 20.6263C6.67859 20.75 8.1182 20.75 9.9547 20.75H10.0453C11.8818 20.75 13.3214 20.75 14.4635 20.6263C15.6291 20.5 16.5734 20.2377 17.3798 19.6518C17.8679 19.2972 18.2972 18.8679 18.6518 18.3798C19.2377 17.5734 19.5 16.6291 19.6263 15.4635C19.75 14.3214 19.75 12.8818 19.75 11.0453V8C19.75 7.58579 19.4142 7.25 19 7.25C18.5858 7.25 18.25 7.58579 18.25 8V11C18.25 12.8916 18.249 14.25 18.135 15.302C18.0225 16.3399 17.8074 16.9901 17.4383 17.4981C17.1762 17.8589 16.8589 18.1762 16.4981 18.4383C15.9901 18.8074 15.3399 19.0225 14.302 19.135C13.25 19.249 11.8916 19.25 10 19.25C8.1084 19.25 6.74999 19.249 5.69804 19.135C4.66013 19.0225 4.00992 18.8074 3.50191 18.4383C3.14111 18.1762 2.82382 17.8589 2.56168 17.4981C2.19259 16.9901 1.97745 16.3399 1.865 15.302C1.75103 14.25 1.75 12.8916 1.75 11C1.75 9.1084 1.75103 7.74999 1.865 6.69805C1.97745 5.66013 2.19259 5.00992 2.56168 4.50191C2.82382 4.14111 3.14111 3.82382 3.50191 3.56168C4.00992 3.19259 4.66013 2.97745 5.69805 2.865C6.74999 2.75103 8.1084 2.75 10 2.75H13Z" fill="currentColor" />
                 <path d="M4.32682 13.5267C4.1444 13.8986 4.29799 14.348 4.66987 14.5304C5.04175 14.7128 5.4911 14.5592 5.67352 14.1873L7.13386 11.2103C7.58649 10.2875 8.91687 10.3326 9.30597 11.2839C10.1852 13.4329 13.1906 13.5347 14.2132 11.4501L15.6736 8.47305C15.856 8.10116 15.7024 7.65181 15.3305 7.4694C14.9586 7.28698 14.5093 7.44057 14.3268 7.81245L12.8665 10.7895C12.4139 11.7123 11.0835 11.6672 10.6944 10.7159C9.81517 8.56687 6.80972 8.46506 5.78715 10.5497L4.32682 13.5267Z" fill="currentColor" />
@@ -44,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
           </Link>
 
           <Link href={'/profile'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/profile' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/profile' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="none">
                 <path d="M14 20H6C4.40921 19.9983 2.88405 19.3657 1.75919 18.2408C0.634327 17.116 0.00165449 15.5908 0 14V6C0.00165449 4.40921 0.634327 2.88405 1.75919 1.75919C2.88405 0.634327 4.40921 0.00165449 6 0L14 0C15.5908 0.00165449 17.116 0.634327 18.2408 1.75919C19.3657 2.88405 19.9983 4.40921 20 6V14C19.9983 15.5908 19.3657 17.116 18.2408 18.2408C17.116 19.3657 15.5908 19.9983 14 20ZM6 1.33125C4.76228 1.3329 3.57572 1.82532 2.70052 2.70052C1.82532 3.57572 1.3329 4.76228 1.33125 6V14C1.3329 15.2377 1.82532 16.4243 2.70052 17.2995C3.57572 18.1747 4.76228 18.6671 6 18.6687H14C15.2377 18.6671 16.4243 18.1747 17.2995 17.2995C18.1747 16.4243 18.6671 15.2377 18.6687 14V6C18.6671 4.76228 18.1747 3.57572 17.2995 2.70052C16.4243 1.82532 15.2377 1.3329 14 1.33125H6Z" fill="currentColor" />
                 <path d="M10 11.3301C9.20888 11.3301 8.43552 11.0955 7.77772 10.656C7.11992 10.2164 6.60723 9.59172 6.30448 8.86081C6.00173 8.12991 5.92252 7.32564 6.07686 6.54972C6.2312 5.77379 6.61217 5.06106 7.17158 4.50165C7.73099 3.94224 8.44372 3.56128 9.21964 3.40694C9.99556 3.2526 10.7998 3.33181 11.5307 3.63456C12.2616 3.93731 12.8864 4.45 13.3259 5.1078C13.7654 5.7656 14 6.53895 14 7.33008C13.9983 8.39044 13.5764 9.40689 12.8266 10.1567C12.0768 10.9065 11.0604 11.3284 10 11.3301ZM10 4.66758C9.47217 4.66758 8.9562 4.8241 8.51732 5.11735C8.07845 5.41059 7.73639 5.82739 7.5344 6.31504C7.33241 6.80269 7.27956 7.33929 7.38253 7.85698C7.48551 8.37466 7.73968 8.85019 8.11291 9.22342C8.48614 9.59665 8.96167 9.85083 9.47935 9.9538C9.99704 10.0568 10.5336 10.0039 11.0213 9.80193C11.5089 9.59994 11.9257 9.25788 12.219 8.81901C12.5122 8.38013 12.6688 7.86416 12.6688 7.33633C12.6688 6.62853 12.3876 5.94973 11.8871 5.44924C11.3866 4.94875 10.7078 4.66758 10 4.66758Z" fill="currentColor" />
@@ -54,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
             </div>
           </Link>
           <Link href={'/classes'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/classes' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/classes' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M18.75 2.25H5.25C3.596 2.25 2.25 3.633 2.25 5.333V14.666C2.25 16.366 3.596 17.749 5.25 17.749H9.25V20.249H7C6.586 20.249 6.25 20.585 6.25 20.999C6.25 21.413 6.586 21.749 7 21.749H17C17.414 21.749 17.75 21.413 17.75 20.999C17.75 20.585 17.414 20.249 17 20.249H14.75V17.749H18.75C20.404 17.749 21.75 16.366 21.75 14.666V5.333C21.75 3.633 20.404 2.25 18.75 2.25ZM13.25 20.25H10.75V17.75H13.25V20.25ZM7.775 16.25C7.77 16.166 7.75 16.083 7.75 16C7.75 14.387 8.662 12.943 10.091 12.21C10.652 12.545 11.3 12.75 12 12.75C12.7 12.75 13.347 12.545 13.909 12.21C15.339 12.942 16.25 14.387 16.25 16C16.25 16.083 16.23 16.166 16.225 16.25H7.775ZM9.75 9C9.75 7.759 10.76 6.75 12 6.75C13.24 6.75 14.25 7.759 14.25 9C14.25 10.241 13.24 11.25 12 11.25C10.76 11.25 9.75 10.241 9.75 9ZM20.25 14.667C20.25 15.54 19.577 16.25 18.75 16.25H17.737C17.741 16.167 17.75 16.083 17.75 16C17.75 14.003 16.72 12.195 15.068 11.145C15.495 10.536 15.75 9.799 15.75 9C15.75 6.932 14.067 5.25 12 5.25C9.933 5.25 8.25 6.932 8.25 9C8.25 9.798 8.505 10.536 8.932 11.145C7.279 12.196 6.25 14.003 6.25 16C6.25 16.083 6.259 16.167 6.263 16.25H5.25C4.423 16.25 3.75 15.54 3.75 14.667V5.333C3.75 4.46 4.423 3.75 5.25 3.75H18.75C19.577 3.75 20.25 4.46 20.25 5.333V14.667Z" fill="currentColor" />
               </svg>
@@ -62,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
             </div>
           </Link>
           <Link href={'/teachers'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/teachers' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/teachers' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M13.2678 14.2996C13.6548 14.4474 13.8486 14.8809 13.7008 15.2678C13.062 16.9405 12.09 17.8626 10.9099 18.3238C9.81757 18.7506 8.6076 18.7504 7.56522 18.7502C7.54347 18.7502 7.5218 18.7502 7.5002 18.7502C6.37998 18.7502 5.44061 18.7595 4.63646 19.0738C3.89724 19.3626 3.20781 19.9405 2.70084 21.2678C2.55304 21.6548 2.11955 21.8486 1.7326 21.7008C1.34565 21.553 1.15177 21.1195 1.29957 20.7326C1.93843 19.06 2.91045 18.1378 4.09051 17.6766C5.18284 17.2498 6.39281 17.25 7.43519 17.2502H7.5002C8.62042 17.2502 9.55979 17.2409 10.3639 16.9266C11.1032 16.6378 11.7926 16.06 12.2996 14.7326C12.4474 14.3456 12.8809 14.1518 13.2678 14.2996Z" fill="currentColor" />
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9478 2.25H17.0552C18.188 2.24998 19.1138 2.24996 19.8446 2.34822C20.6086 2.45093 21.2709 2.67321 21.7996 3.2019C22.3283 3.7306 22.5506 4.39293 22.6533 5.15689C22.7515 5.88775 22.7515 6.81348 22.7515 7.94631V10.0537C22.7515 11.1865 22.7515 12.1123 22.6533 12.8431C22.5506 13.6071 22.3283 14.2694 21.7996 14.7981C21.2709 15.3268 20.6086 15.5491 19.8446 15.6518C19.1138 15.75 18.188 15.75 17.0552 15.75H15.5002C15.086 15.75 14.7502 15.4142 14.7502 15C14.7502 14.5858 15.086 14.25 15.5002 14.25H17.0015C18.2012 14.25 19.0256 14.2484 19.6447 14.1652C20.2424 14.0848 20.5354 13.941 20.7389 13.7374C20.9425 13.5339 21.0863 13.2409 21.1667 12.6432C21.2499 12.0241 21.2515 11.1997 21.2515 10V8C21.2515 6.80029 21.2499 5.97595 21.1667 5.35676C21.0863 4.75914 20.9425 4.4661 20.7389 4.26256C20.5354 4.05902 20.2424 3.91519 19.6447 3.83484C19.0256 3.75159 18.2012 3.75 17.0015 3.75H13.0015C11.8018 3.75 10.9775 3.75159 10.3583 3.83484C9.76068 3.91519 9.46764 4.05902 9.2641 4.26256C9.08983 4.43684 8.96174 4.67419 8.87775 5.10298C8.78965 5.55272 8.76138 6.15049 8.75412 7.00636C8.75061 7.42056 8.41199 7.75349 7.99779 7.74997C7.58359 7.74646 7.25066 7.40784 7.25418 6.99364C7.26139 6.14295 7.28772 5.41705 7.40572 4.81464C7.52782 4.1913 7.75731 3.64804 8.20344 3.2019C8.73214 2.67321 9.39447 2.45093 10.1584 2.34822C10.8892 2.24996 11.815 2.24998 12.9478 2.25Z" fill="currentColor" />
@@ -73,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
             </div>
           </Link>
           <Link href={'/messages'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/messages' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/messages' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 22 22" fill="none">
                 <path d="M11 21.81C10.31 21.81 9.66 21.46 9.2 20.85L7.7 18.85C7.67 18.81 7.55 18.76 7.5 18.75H7C2.83 18.75 0.25 17.62 0.25 12V7C0.25 2.58 2.58 0.25 7 0.25H15C19.42 0.25 21.75 2.58 21.75 7V12C21.75 16.42 19.42 18.75 15 18.75H14.5C14.42 18.75 14.35 18.79 14.3 18.85L12.8 20.85C12.34 21.46 11.69 21.81 11 21.81ZM7 1.75C3.42 1.75 1.75 3.42 1.75 7V12C1.75 16.52 3.3 17.25 7 17.25H7.5C8.01 17.25 8.59 17.54 8.9 17.95L10.4 19.95C10.75 20.41 11.25 20.41 11.6 19.95L13.1 17.95C13.43 17.51 13.95 17.25 14.5 17.25H15C18.58 17.25 20.25 15.58 20.25 12V7C20.25 3.42 18.58 1.75 15 1.75H7Z" fill="currentColor" />
                 <path d="M11 11C10.44 11 10 10.55 10 10C10 9.45 10.45 9 11 9C11.55 9 12 9.45 12 10C12 10.55 11.56 11 11 11Z" fill="currentColor" />
@@ -84,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
             </div>
           </Link>
           <Link href={'/notes'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/notes' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/notes' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M16.5227 10.3125C16.5227 9.79472 16.103 9.375 15.5852 9.375H5.92896C5.41117 9.375 4.99146 9.79472 4.99146 10.3125C4.99146 10.8303 5.41117 11.25 5.92896 11.25H15.5852C16.103 11.25 16.5227 10.8303 16.5227 10.3125Z" fill="#0B1E46" />
                 <path d="M5.92896 13.125C5.41117 13.125 4.99146 13.5447 4.99146 14.0625C4.99146 14.5803 5.41117 15 5.92896 15H11.7935C12.3113 15 12.731 14.5803 12.731 14.0625C12.731 13.5447 12.3113 13.125 11.7935 13.125H5.92896Z" fill="#0B1E46" />
@@ -96,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
             </div>
           </Link>
           <Link href={'/timetable'} onClick={isLgScreen ? undefined : toggleSidebar}>
-            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/timetable' ? 'bg-blue-50 rounded-lg text-blue-700' : ''}`}>
+            <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/timetable' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C20.1752 21.4816 19.3001 21.7706 18 21.8985" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
                 <path d="M7 4V2.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" />
