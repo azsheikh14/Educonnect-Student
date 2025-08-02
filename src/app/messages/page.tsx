@@ -322,7 +322,7 @@ const StudentChatComponent = () => {
                             <div className='flex items-center'>
                                 <div className='w-[40px]'>
                                     {currentChat.teacherProfilePic ? (
-                                        <img src="/bijju.png" className='rounded-full w-full h-full object-cover' alt="" />
+                                        <img src={userData?.profilePic} className='rounded-full w-[20px] h-[20px] object-cover' alt="" />
                                     ) : (
                                         <div className='w-10 h-10 bg-yellow-400 rounded-full'></div>
                                     )}
@@ -379,9 +379,9 @@ const StudentChatComponent = () => {
                                                     {!isSameSender && (
                                                         <div className="mr-2 mb-4">
                                                             {currentChat?.teacherProfilePic ? (
-                                                                <img src={currentChat.teacherProfilePic} className='rounded-full w-full h-full object-cover' alt="" />
+                                                                <img src={currentChat.teacherProfilePic} className='rounded-full w-[20px] h-[20px] object-cover' alt="" />
                                                             ) : (
-                                                                <img src="/svg/noPic.svg" className='rounded-full w-full h-full object-cover' alt="" />
+                                                                <img src="/svg/noPic.svg" className='rounded-full w-[20px] h-[20px] object-cover' alt="" />
                                                             )}
                                                         </div>
                                                     )}

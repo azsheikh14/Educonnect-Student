@@ -49,7 +49,8 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 
   useEffect(() => {
     const storedNotifications = localStorage.getItem('notifications');
-    if (storedNotifications) {
+    console.log('storedNotifications :', storedNotifications);
+    if (storedNotifications && storedNotifications !== 'undefined') {
       const parsed = JSON.parse(storedNotifications);
       setNotificationsState(parsed);
     }

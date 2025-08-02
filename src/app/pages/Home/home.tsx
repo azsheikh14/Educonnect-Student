@@ -24,7 +24,10 @@ const Home = () => {
         setLoading(true);
         try {
             const response = await getTeachersByPageLimit(page, limit)
-            setTeachers((prevTeachers) => [...prevTeachers, ...response.teachers]);
+            console.log('response :', response);
+            if (response?.teachers) {
+                setTeachers((prevTeachers) => [...prevTeachers, ...response?.teachers]);
+            }
             setTotalTeachers(response.totalTeachers);
         } catch (error) {
             console.error('Error fetching teachers:', error);
@@ -134,7 +137,7 @@ const Home = () => {
                                 Results
                             </h2>
                             <p
-                                onClick={()=> window.location.href = '/profile'}
+                                onClick={() => window.location.href = '/profile'}
                                 className="text-[#76309B] text-sm cursor-pointer font-medium hover:underline hover:text-[#5e247d] transition"
                             >
                                 View All →

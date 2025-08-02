@@ -148,7 +148,7 @@ const RecentChats: React.FC<RecentChatsProps> = ({ chats, onChatSelect }) => {
                         <li key={index} className="cursor-pointer flex items-center bg-white rounded-lg px-3 py-2" onClick={() => onChatSelect(chat)}>
                             <div className="w-10 h-10 border-2 border-white rounded-full flex items-center justify-center overflow-hidden">
                                 {chat.teacherProfilePic ? (
-                                    <img src={chat.teacherProfilePic} className="rounded-full w-full h-full object-cover" alt="" />
+                                    <img src={chat.teacherProfilePic} className="rounded-full w-[20px] h-[20px] object-cover" alt="" />
                                 ) : (
                                     <div className="w-full h-full bg-yellow-400 rounded-full"></div>
                                 )}

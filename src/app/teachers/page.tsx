@@ -28,7 +28,9 @@ const Teachers = () => {
         setLoading(true);
         try {
             const response = await getTeachersByPageLimit(page, limit);
-            setTeachers((prevTeachers) => [...prevTeachers, ...response.teachers]);
+            if (response?.teachers) {
+                setTeachers((prevTeachers) => [...prevTeachers, ...response?.teachers]);
+            }
             setTotalTeachers(response.totalTeachers);
         } catch (error) {
             console.error('Error fetching teachers:', error);
