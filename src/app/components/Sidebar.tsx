@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
         <div className='w-full border-b border-gray-300 h-14 flex px-4 items-center cursor-pointer'>
           <Link href='/' onClick={isLgScreen ? undefined : toggleSidebar}>
             <div className='flex items-center justify-start'>
-              <img src="/EduConnect.png" className='h-8' alt="" />
+              <img src="/Educonnect.png" className='h-8' alt="" />
               {/* <div className='w-6 h-6 bg-blue-500 rounded-md'>
                 <p className="text-white text-center font-racing-sans-one text-[17.5px] font-bold leading-normal">S</p>
               </div>
