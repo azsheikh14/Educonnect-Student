@@ -12,6 +12,7 @@ import { MdOutlinePerson2 } from "react-icons/md";
 import { MdOutlineSchool } from "react-icons/md";
 import Image from 'next/image'
 import { useUserContext } from '@/app/contexts/userContext';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { toast } from 'react-toastify';
 
 interface ErrorResponse {
@@ -27,6 +28,8 @@ const Login = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [isNotRobot, setIsNotRobot] = useState(false);
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -35,6 +38,7 @@ const Login = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        if(!isNotRobot) {toast.error('Please verify that you are not a robot.'); return}
         setLoading(true);
 
         try {
@@ -94,8 +98,7 @@ const Login = () => {
                     </div>
                     <div className="text-sm text-gray-500">Dont have an account? <span className='text-blue-600 cursor-pointer' onClick={() => { window.location.href = '/account/signup' }}>Signup</span></div>
                     <div className="flex items-center space-x-2">
-                        <input type="checkbox" className="h-4 w-4 cursor-pointer" />
-                        <label>I'm not a robot</label>
+                        <ReCAPTCHA sitekey={siteKey} onChange={() => {setIsNotRobot(true)}} />
                     </div>
                     <button type="submit" style={{ backgroundColor: "#76309B" }} className="w-full cursor-pointer text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                         {loading ? (
