@@ -51,6 +51,7 @@ const Teachers = () => {
         const threshold = 2;
 
         if (windowHeight + scrollTop >= documentHeight - threshold) {
+            console.log('Updated here')
             if (hasMore && !loading) {
                 pageRef.current = pageRef.current + 1
                 setPage((teachers.length / 12) + 1);
@@ -74,7 +75,7 @@ const Teachers = () => {
 
     useEffect(() => {
         if (page > 1) {
-            fetchTeachers(page, 12);
+            fetchTeachers(page, 30);
         }
     }, [page]);
 
