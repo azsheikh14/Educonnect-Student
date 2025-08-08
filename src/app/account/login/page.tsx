@@ -96,7 +96,7 @@ const Login = () => {
                             )}
                         </div>
                     </div>
-                    <div className="text-sm text-gray-500">Dont have an account? <span className='text-blue-600 cursor-pointer' onClick={() => { window.location.href = '/account/signup' }}>Signup</span></div>
+                    {/* <div className="text-sm text-gray-500">Dont have an account? <span className='text-blue-600 cursor-pointer' onClick={() => { window.location.href = '/account/signup' }}>Signup</span></div> */}
                     <div className="flex items-center space-x-2">
                         <ReCAPTCHA sitekey={siteKey} onChange={() => {setIsNotRobot(true)}} />
                     </div>

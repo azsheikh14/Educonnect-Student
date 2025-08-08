@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
               <p className="ml-2">Chat</p>
             </div>
           </Link>
-          <Link href={'/notes'} onClick={isLgScreen ? undefined : toggleSidebar}>
+          {/* <Link href={'/notes'} onClick={isLgScreen ? undefined : toggleSidebar}>
             <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/notes' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M16.5227 10.3125C16.5227 9.79472 16.103 9.375 15.5852 9.375H5.92896C5.41117 9.375 4.99146 9.79472 4.99146 10.3125C4.99146 10.8303 5.41117 11.25 5.92896 11.25H15.5852C16.103 11.25 16.5227 10.8303 16.5227 10.3125Z" fill="#0B1E46" />
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, isLgScreen }) 
               </svg>
               <p className="ml-2">Notes</p>
             </div>
-          </Link>
+          </Link> */}
           <Link href={'/timetable'} onClick={isLgScreen ? undefined : toggleSidebar}>
             <div className={`text-lg font-medium flex h-[52px] space-x-2 items-center justify-start pl-4 py-3 w-full mb-1 cursor-pointer ${pathname === '/timetable' ? 'global-background-light rounded-lg text-white' : ''}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

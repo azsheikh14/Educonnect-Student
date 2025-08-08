@@ -19,13 +19,13 @@ const courses = [
 ];
 
 const classes = [
-    'O-Level 1',
-    'O-Level 2',
-    'O-Level 3',
-    'Matric P-1',
-    'Matric P-2',
-    'Intermediate P-1',
-    'Intermediate P-2',
+    // 'O-Level 1',
+    // 'O-Level 2',
+    // 'O-Level 3',
+    // 'Matric P-1',
+    // 'Matric P-2',
+    // 'Intermediate P-1',
+    // 'Intermediate P-2',
     'Bachelors',
     'Masters'
 ];
