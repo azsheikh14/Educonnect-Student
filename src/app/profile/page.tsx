@@ -27,7 +27,8 @@ const classes = [
     // 'Intermediate P-1',
     // 'Intermediate P-2',
     'Bachelors',
-    'Masters'
+    'Masters',
+    'Phd'
 ];
 
 const ProfileComponent = () => {
