@@ -179,46 +179,6 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({ isOpen, toggleSidebar }) => {
                     <img onClick={toggleSidebar} src="/menu.png" alt="" />
                 }
             </div>
-            <div className='relative flex items-center hidden md:block'>
-                <div className="flex">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="searchInput p-2 border border-gray-300 rounded pr-10 focus:outline-none"
-                        onFocus={() => setSearchDropdownOpen(true)} // Open dropdown on focus
-                    />
-                    <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                        <FaSearch />
-                    </button>
-                </div>
-                {isSearchDropdownOpen && searchTerm && filteredOptions?.length > 0 && (
-                    <ul className="absolute z-10 bg-white border border-gray-300 mt-1 rounded shadow-lg w-full">
-                        {filteredOptions.map(option => (
-                            <li key={option.name} className="">
-                                <div onClick={() => handleSearchOptionClick(option.path)} className="cursor-pointer hover:bg-gray-100 transition duration-200 p-2">
-                                    <div className="font-semibold">{option.name}</div>
-                                    <div className="text-gray-500 text-sm">{option.description}</div>
-                                </div>
-                                {option?.filteredSections?.length > 0 && (
-                                    <ul className="mt-1">
-                                        {option.filteredSections.map(section => (
-                                            <li key={section.anchor} onClick={() => handleSearchOptionClick(option.path, section.anchor)} className="p-2 cursor-pointer hover:bg-gray-100 transition duration-200 text-base font-medium flex pl-6">
-                                                <svg className='mr-2' width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M8 7L8 9C8 11.2091 9.79086 13 12 13L17 13" stroke="#200E32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M14 16L17 13L14 10" stroke="#200E32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                                {section.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
             <div className='flex items-center mr-5'>
                 <div className='flex items-center'>
                     <img src={userData?.profilePic} className='w-8 h-8 bg-yellow-400 rounded-full mr-2' alt="" />
