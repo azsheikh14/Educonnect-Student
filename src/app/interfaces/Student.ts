@@ -19,5 +19,6 @@ export default interface Student {
         subject: string,
         marks: number,
         semester: number
-    }]
+    }];
+    attendancePercentage: number;
 }

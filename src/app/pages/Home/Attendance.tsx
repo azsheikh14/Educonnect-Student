@@ -6,10 +6,12 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { useUserContext } from "@/app/contexts/userContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Attendance = () => {
+  const { userData } = useUserContext();
   const data = {
     labels: ["Present", "Absent", "Leaves"],
     datasets: [
@@ -59,7 +61,7 @@ const Attendance = () => {
       <div className="relative h-52 w-full">
         <Doughnut data={data} options={options} />
         <div className="absolute inset-0 flex items-center justify-center text-xl font-bold text-purple-700">
-          85%
+          {userData?.attendancePercentage ?? 0}%
         </div>
       </div>
     </div>

@@ -38,7 +38,7 @@ const Login = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if(!isNotRobot) {toast.error('Please verify that you are not a robot.'); return}
+        // if(!isNotRobot) {toast.error('Please verify that you are not a robot.'); return}
         setLoading(true);
 
         try {
