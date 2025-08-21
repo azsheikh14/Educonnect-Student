@@ -58,7 +58,8 @@ const ProfileComponent = () => {
             subject: '',
             marks: 0,
             semester: 0
-        }]
+        }],
+        attendancePercentage: 0,
     });
 
     const handleSort = (key: string) => {
