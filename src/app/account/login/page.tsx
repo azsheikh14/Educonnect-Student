@@ -47,6 +47,8 @@ const Login = () => {
             const { token, user } = response.data;
             setUserData(user)
             Cookies.set('studentToken', token, { expires: 1 });
+            toast.success('Login successful! Redirecting...');
+            
             router.push('/');
         } catch (error) {
             toast.error('Invalid Credentials');
